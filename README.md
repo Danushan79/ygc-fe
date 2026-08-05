@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mediscan
 
-## Getting Started
+## Overview
 
-First, run the development server:
+Mediscan is a full-stack medical application built with Next.js. This repository currently
+contains the **project foundation only** — folder structure, tooling, and a health check
+endpoint. UI screens, authentication, database schema, and AI/scanning features will be added
+in later tasks.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Tech Stack
+
+- [Next.js](https://nextjs.org) (App Router) — frontend + backend (API routes)
+- [React](https://react.dev) 19
+- [TypeScript](https://www.typescriptlang.org)
+- [Tailwind CSS](https://tailwindcss.com) 4
+- [ESLint](https://eslint.org) (`eslint-config-next`)
+- [Prettier](https://prettier.io) (with `prettier-plugin-tailwindcss`)
+
+## Folder Structure
+
+```
+src/
+├── app/            # Routes, layouts, and API route handlers (App Router)
+│   └── api/        # Backend HTTP endpoints (e.g. /api/health)
+├── components/      # Shared, reusable UI components
+├── features/        # Feature-scoped modules (UI + logic grouped by domain)
+├── services/         # Business logic / service layer, consumed by API routes
+├── lib/             # Low-level integrations (e.g. database client)
+├── hooks/           # Shared React hooks
+├── types/            # Shared TypeScript types
+├── utils/            # Generic, stateless helper functions
+├── constants/         # App-wide constant values
+└── config/            # Typed environment/config loading
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Development Commands
 
-## Learn More
+| Command                | Description                               |
+| ---------------------- | ----------------------------------------- |
+| `npm run dev`          | Start the development server              |
+| `npm run build`        | Build the app for production              |
+| `npm run start`        | Start the production server (after build) |
+| `npm run lint`         | Run ESLint                                |
+| `npm run format`       | Format the codebase with Prettier         |
+| `npm run format:check` | Check formatting without writing files    |
 
-To learn more about Next.js, take a look at the following resources:
+## Environment Setup
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Copy `.env.example` to `.env.local`:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```bash
+   cp .env.example .env.local
+   ```
 
-## Deploy on Vercel
+2. Fill in the values as needed. Environment variables are read centrally in
+   [`src/config/env.ts`](src/config/env.ts) — import `env` from there instead of accessing
+   `process.env` directly elsewhere in the app.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Variable                | Description                               |
+| ----------------------- | ----------------------------------------- |
+| `NEXT_PUBLIC_APP_URL`   | Public base URL of the app                |
+| `MONGODB_URI`           | MongoDB connection string                 |
+| `JWT_SECRET`            | Secret used to sign auth session JWTs     |
+| `CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name (for avatar photos) |
+| `CLOUDINARY_API_KEY`    | Cloudinary API key                        |
+| `CLOUDINARY_API_SECRET` | Cloudinary API secret                     |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Health Check
+
+Once the dev server is running, verify the backend is up:
+
+```bash
+curl http://localhost:3000/api/health
+```
+
+```json
+{ "status": "ok", "application": "mediscan" }
+```
