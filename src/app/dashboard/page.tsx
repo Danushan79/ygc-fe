@@ -1,4 +1,5 @@
 import { DashboardTabs } from "@/components/dashboard/dashboard-tabs";
+import { UploadDocumentButton } from "@/components/dashboard/upload-document-button";
 import { getCurrentUser, requireSession } from "@/lib/auth/session";
 import { getDocuments } from "@/services/document.service";
 
@@ -16,13 +17,15 @@ export default async function DashboardPage() {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="mb-4 flex flex-shrink-0 items-end justify-between">
+      <div className="mb-4 flex flex-shrink-0 items-stretch justify-between">
         <div>
           <h2 className="text-2xl leading-tight font-bold text-slate-900">
             Welcome, <span className="text-blue-800">{user?.fullName ?? "there"}</span>
           </h2>
           <p className="mt-1 text-sm text-slate-500">Here&apos;s your health timeline overview.</p>
         </div>
+
+        <UploadDocumentButton />
       </div>
 
       <DashboardTabs documentsData={documentsData} />
