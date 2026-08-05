@@ -1,7 +1,14 @@
 import { ArrowRight, BadgeCheck, Pill, TrendingUp, TriangleAlert } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import type { UploadDocumentsResult } from "@/types/document";
+import type { CrossCheckIssue, UploadDocumentsResult } from "@/types/document";
 import { isLabResultFlagged } from "@/utils/lab-result";
+
+function issueConfidence(issue: CrossCheckIssue): number | undefined {
+  if (typeof issue === "string") {
+    return undefined;
+  }
+  return typeof issue.confidence === "number" ? issue.confidence : undefined;
+}
 
 interface SummaryCard {
   title: string;
@@ -34,13 +41,23 @@ export function SummaryCards({ data }: SummaryCardsProps) {
 
   const labTrendCount = (timeline?.lab_results_timeline ?? []).filter(isLabResultFlagged).length;
 
-  const visitConfidences = (timeline?.visits ?? [])
-    .map((visit) => visit.overall_confidence)
-    .filter((confidence): confidence is number => typeof confidence === "number");
+  // Confidence in the cross-check ANALYSIS (drug interactions, duplicates,
+  // dosage conflicts, allergy conflicts) — not the OCR/extraction confidence
+  // of the source documents (that's a separate, per-document quality signal
+  // used elsewhere, e.g. the "needs review" count on documents).
+  const analysisConfidences = [
+    ...(crossCheck?.potential_drug_interactions ?? []).map((item) => item.confidence),
+    ...(crossCheck?.duplicate_prescriptions ?? []).map((item) => item.confidence),
+    ...(crossCheck?.conflicting_dosage_instructions ?? []).map(issueConfidence),
+    ...(crossCheck?.allergy_conflicts ?? []).map(issueConfidence),
+  ].filter((confidence): confidence is number => typeof confidence === "number");
+
   const avgConfidence =
-    visitConfidences.length > 0
+    analysisConfidences.length > 0
       ? Math.round(
-          (visitConfidences.reduce((sum, confidence) => sum + confidence, 0) / visitConfidences.length) * 100
+          (analysisConfidences.reduce((sum, confidence) => sum + confidence, 0) /
+            analysisConfidences.length) *
+            100,
         )
       : null;
 

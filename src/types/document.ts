@@ -49,7 +49,9 @@ export interface DuplicatePrescription {
   confidence: number;
 }
 
-export type CrossCheckIssue = string | { medication?: string; explanation?: string; [key: string]: unknown };
+export type CrossCheckIssue =
+  | string
+  | { medication?: string; explanation?: string; confidence?: number; [key: string]: unknown };
 
 export interface CrossCheckReport {
   potential_drug_interactions: PotentialDrugInteraction[];
