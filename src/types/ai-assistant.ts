@@ -10,4 +10,10 @@ export interface AiMessageDto {
 
 export interface AskAiAssistantRequestBody {
   question: string;
+  sessionId?: string;
+}
+
+export interface AskAiAssistantResponseDto {
+  message: AiMessageDto;
+  sessionId: string;
 }

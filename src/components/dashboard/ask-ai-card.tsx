@@ -5,25 +5,9 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { ApiRequestError, askAiAssistantRequest } from "@/lib/api/ai-assistant-client";
 import type { AiMessageDto } from "@/types/ai-assistant";
 
-const INITIAL_MESSAGES: AiMessageDto[] = [
-  {
-    id: "seed-question",
-    role: "user",
-    content: "Did my new med get prescribed despite allergy noted last year?",
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: "seed-answer",
-    role: "assistant",
-    content:
-      "Yes. Amoxicillin was prescribed Jul 15, 2026, but you have an allergy to Penicillin (Dec 2025).",
-    createdAt: new Date().toISOString(),
-    warning: "Amoxicillin is in the penicillin family.",
-  },
-];
-
 export function AskAiCard() {
-  const [messages, setMessages] = useState<AiMessageDto[]>(INITIAL_MESSAGES);
+  const [messages, setMessages] = useState<AiMessageDto[]>([]);
+  const [sessionId, setSessionId] = useState<string | undefined>(undefined);
   const [question, setQuestion] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -49,8 +33,9 @@ export function AskAiCard() {
     setIsSending(true);
 
     try {
-      const answer = await askAiAssistantRequest({ question: trimmed });
-      setMessages((prev) => [...prev, answer]);
+      const result = await askAiAssistantRequest({ question: trimmed, sessionId });
+      setSessionId(result.sessionId);
+      setMessages((prev) => [...prev, result.message]);
     } catch (err) {
       setError(
         err instanceof ApiRequestError ? err.message : "Something went wrong. Please try again."
@@ -70,6 +55,12 @@ export function AskAiCard() {
       </div>
 
       <div className="flex-1 space-y-3 overflow-y-auto bg-white p-2">
+        {messages.length === 0 && !isSending && (
+          <p className="p-2 text-center text-[11px] text-slate-400">
+            Ask a question about your medical records to get started.
+          </p>
+        )}
+
         {messages.map((message) =>
           message.role === "user" ? (
             <div key={message.id} className="flex justify-end">

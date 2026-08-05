@@ -12,7 +12,6 @@ export const env = {
   cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
   cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
   cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET,
-  aiAssistantApiUrl: process.env.AI_ASSISTANT_API_URL,
   documentsApiBaseUrl: process.env.DOCUMENTS_API_BASE_URL ?? "http://127.0.0.1:8000",
 } as const;
 
