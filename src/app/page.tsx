@@ -25,12 +25,7 @@ const STEPS = [
 export default function Home() {
   return (
     <div className="relative flex-1 overflow-hidden bg-[#f5f6fb]">
-      <span
-        aria-hidden
-        className="pointer-events-none absolute top-6 left-0 -translate-x-1/4 text-7xl font-extrabold whitespace-nowrap text-blue-900/5 select-none sm:text-8xl"
-      >
-        CliniCore
-      </span>
+
 
       <div className="relative mx-auto flex max-w-5xl flex-col items-center px-6 pt-20 pb-24 text-center sm:pt-28">
         <div className="flex items-center gap-3">
