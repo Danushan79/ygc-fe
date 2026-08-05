@@ -1,13 +1,12 @@
 "use client";
 
-import { FileText, LayoutDashboard, Users } from "lucide-react";
+import { LayoutDashboard, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const NAV_ITEMS = [
   { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/users", label: "Users", icon: Users },
-  { href: "/admin/documents", label: "Documents", icon: FileText },
 ];
 
 export function AdminSidebar() {

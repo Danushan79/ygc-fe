@@ -1,7 +1,19 @@
-import { requireAdminSession } from "@/lib/auth/session";
+import { AdminDashboard } from "@/components/admin/admin-dashboard";
+import { requireAdminUser } from "@/lib/auth/session";
 
 export default async function AdminDashboardPage() {
-  await requireAdminSession();
+  await requireAdminUser();
 
-  return null;
+  return (
+    <div>
+      <h2 className="text-2xl font-bold text-slate-900">Dashboard</h2>
+      <p className="mt-1 text-sm text-slate-500">
+        Patients, uploaded documents, and cross-check safety flags at a glance.
+      </p>
+
+      <div className="mt-6">
+        <AdminDashboard />
+      </div>
+    </div>
+  );
 }

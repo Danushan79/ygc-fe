@@ -37,3 +37,48 @@ export async function uploadAvatar(dataUri: string, userId: string): Promise<str
 
   return result.secure_url;
 }
+
+/**
+ * Deletes every file uploaded for this user's medical documents
+ * (storage.py's `mediscan/<user_id>/` folder — resource_type is "auto" at
+ * upload time, so originals can land as image, raw, or video) and the
+ * user's avatar, then removes the now-empty per-user folder. Called from
+ * user deletion so no orphaned files are left behind in Cloudinary.
+ */
+export async function deleteUserCloudinaryAssets(userId: string): Promise<void> {
+  ensureConfigured();
+
+  const documentsFolder = `mediscan/${userId}`;
+  await Promise.all(
+    (["image", "raw", "video"] as const).map((resource_type) =>
+      cloudinary.api
+        .delete_resources_by_prefix(documentsFolder, { resource_type })
+        .catch(() => undefined),
+    ),
+  );
+  await cloudinary.api.delete_folder(documentsFolder).catch(() => undefined);
+
+  await cloudinary.uploader
+    .destroy(`${AVATAR_FOLDER}/${userId}`, { resource_type: "image" })
+    .catch(() => undefined);
+}
+
+const DOCUMENTS_FOLDER = "mediscan";
+
+/**
+ * Counts files under this user's `mediscan/<user_id>/` folder — the source
+ * of truth for "how many documents has this user uploaded", since it counts
+ * actual stored files regardless of resource_type (image/raw/video) rather
+ * than relying on the `documents` Mongo collection, which only holds one
+ * record per successfully *extracted* page.
+ */
+export async function countUserDocuments(userId: string): Promise<number> {
+  ensureConfigured();
+
+  const result = await cloudinary.search
+    .expression(`folder=${DOCUMENTS_FOLDER}/${userId}`)
+    .max_results(1)
+    .execute();
+
+  return (result.total_count as number) ?? 0;
+}
