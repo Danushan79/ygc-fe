@@ -97,19 +97,7 @@ export function SummaryCards({ data }: SummaryCardsProps) {
       linkClassName: "text-yellow-800",
       valueClassName: "text-yellow-700",
       valueSizeClassName: "text-xl",
-    },
-    {
-      title: "Lab Trend",
-      linkLabel: labTrendCount > 0 ? "Out of range" : "Within range",
-      value: String(labTrendCount),
-      icon: TrendingUp,
-      cardClassName: "bg-green-50 border-green-200",
-      iconWrapClassName: "bg-green-100 text-green-700",
-      titleClassName: "text-green-900",
-      linkClassName: "text-green-800",
-      valueClassName: "text-green-700",
-      valueSizeClassName: "text-xl",
-    },
+    }
   ];
 
   return (
