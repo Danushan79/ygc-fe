@@ -23,7 +23,7 @@ export function LabTrendsCard({ labResults, trends = [] }: LabTrendsCardProps) {
   rows.forEach((row, index) => lastRowIndexByTest.set(row.label.toLowerCase(), index));
 
   return (
-    <div className="flex h-48 flex-shrink-0 flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
+    <div className="flex h-full flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
       <div className="flex flex-shrink-0 items-center justify-between border-b border-slate-200 bg-slate-50 px-3 py-2">
         <h3 className="text-sm font-semibold text-slate-900">Lab Trends</h3>
         {rows.length > 0 && (
