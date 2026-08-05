@@ -66,11 +66,38 @@ export interface TimelineData {
   known_allergies: string[];
 }
 
+export interface LabTrendDataPoint {
+  date?: string;
+  value: unknown;
+  flag: string;
+  source_file?: string;
+}
+
+export interface LabTrend {
+  test_name: string;
+  unit: string;
+  reference_range: string | null;
+  data_points: LabTrendDataPoint[];
+  direction: string;
+  flag_sequence: string;
+  crossed_into_abnormal_at: { date?: string; flag: string } | null;
+  approaching_threshold: boolean;
+  confidence: number;
+  explanation: string;
+}
+
+export interface LabTrendsResult {
+  trends: LabTrend[];
+  insufficient_data: { test_name: string; reason: string }[];
+  note: string;
+}
+
 export interface UploadDocumentsResult {
   user_id: string;
   documents_added?: number;
   documents_total: number;
   timeline: TimelineData;
   cross_check_report: CrossCheckReport;
+  lab_trends?: LabTrendsResult;
   indexed?: boolean;
 }

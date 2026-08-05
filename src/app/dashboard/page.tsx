@@ -34,7 +34,10 @@ export default async function DashboardPage() {
       <div className="flex min-h-0 flex-1 gap-4">
         <div className="flex h-full min-w-0 flex-[2] flex-col gap-4">
           <HealthTimelineCard visits={documentsData?.timeline?.visits ?? []} />
-          <LabTrendsCard labResults={documentsData?.timeline?.lab_results_timeline ?? []} />
+          <LabTrendsCard
+            labResults={documentsData?.timeline?.lab_results_timeline ?? []}
+            trends={documentsData?.lab_trends?.trends ?? []}
+          />
         </div>
 
         <div className="flex h-full w-full max-w-sm min-w-0 flex-1 flex-col gap-4 overflow-y-auto pr-1">
