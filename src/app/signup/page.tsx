@@ -117,7 +117,7 @@ export default function SignUpPage() {
     <AuthShell
       icon={<ShieldPlus className="h-8 w-8 text-blue-800" strokeWidth={2.25} />}
       title="Create Account"
-      subtitle="Sign up for Medi Scan"
+      subtitle="Sign up for CliniCore"
     >
       {isSignedUp ? (
         <div className="flex flex-col items-center gap-3 py-6 text-center">

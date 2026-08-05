@@ -15,7 +15,7 @@ export function AdminSidebar() {
   return (
     <aside className="flex w-60 flex-shrink-0 flex-col border-r border-slate-200 bg-slate-50">
       <div className="px-6 py-6">
-        <p className="text-2xl font-extrabold text-blue-800">Medi Scan</p>
+        <p className="text-2xl font-extrabold text-blue-800">CliniCore</p>
         <p className="mt-1 text-sm text-slate-500">Admin Portal</p>
       </div>
 

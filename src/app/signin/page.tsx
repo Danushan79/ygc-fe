@@ -82,7 +82,7 @@ export default function SignInPage() {
     <AuthShell
       icon={<ShieldPlus className="h-8 w-8 text-blue-800" strokeWidth={2.25} />}
       title="Welcome back"
-      subtitle="Sign in to Medi Scan"
+      subtitle="Sign in to CliniCore"
     >
       <form noValidate onSubmit={handleSubmit} className="flex flex-col gap-6">
         {formError && <FormBanner tone="error">{formError}</FormBanner>}

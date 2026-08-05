@@ -29,13 +29,13 @@ export default function Home() {
         aria-hidden
         className="pointer-events-none absolute top-6 left-0 -translate-x-1/4 text-7xl font-extrabold whitespace-nowrap text-blue-900/5 select-none sm:text-8xl"
       >
-        Medi Scan
+        CliniCore
       </span>
 
       <div className="relative mx-auto flex max-w-5xl flex-col items-center px-6 pt-20 pb-24 text-center sm:pt-28">
         <div className="flex items-center gap-3">
           <SquareActivity className="h-9 w-9 text-blue-800 sm:h-10 sm:w-10" strokeWidth={2.25} />
-          <h1 className="text-3xl font-extrabold text-blue-800 sm:text-4xl">Medi Scan</h1>
+          <h1 className="text-3xl font-extrabold text-blue-800 sm:text-4xl">CliniCore</h1>
         </div>
 
         <h2 className="mt-6 text-2xl font-bold text-slate-900 sm:text-3xl">

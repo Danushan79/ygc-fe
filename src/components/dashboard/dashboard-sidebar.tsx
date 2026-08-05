@@ -34,7 +34,7 @@ export function DashboardSidebar() {
             <LayoutDashboard className="h-4 w-4" strokeWidth={2.5} />
           </div>
           <div>
-            <p className="text-lg font-bold text-blue-800">Medi Scan</p>
+            <p className="text-lg font-bold text-blue-800">CliniCore</p>
             <p className="text-xs text-slate-500">Patient Portal</p>
           </div>
         </div>
