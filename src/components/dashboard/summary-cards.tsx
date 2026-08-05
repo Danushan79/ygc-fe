@@ -13,6 +13,7 @@ interface SummaryCard {
   titleClassName: string;
   linkClassName: string;
   valueClassName: string;
+  valueSizeClassName: string;
 }
 
 interface SummaryCardsProps {
@@ -45,6 +46,18 @@ export function SummaryCards({ data }: SummaryCardsProps) {
 
   const summaryCards: SummaryCard[] = [
     {
+      title: "Confidence",
+      linkLabel: avgConfidence !== null && avgConfidence >= 80 ? "High" : "Review",
+      value: avgConfidence !== null ? `${avgConfidence}%` : "—",
+      icon: BadgeCheck,
+      cardClassName: "bg-slate-100 border-slate-200",
+      iconWrapClassName: "bg-blue-100 text-blue-700",
+      titleClassName: "text-slate-900",
+      linkClassName: "text-slate-500",
+      valueClassName: "text-blue-700",
+      valueSizeClassName: "text-3xl",
+    },
+    {
       title: "Safety Alerts",
       linkLabel: safetyAlertsCount > 0 ? "Review needed" : "All clear",
       value: String(safetyAlertsCount),
@@ -54,6 +67,7 @@ export function SummaryCards({ data }: SummaryCardsProps) {
       titleClassName: "text-red-950",
       linkClassName: "text-red-800",
       valueClassName: "text-red-600",
+      valueSizeClassName: "text-xl",
     },
     {
       title: "Med Check",
@@ -65,6 +79,7 @@ export function SummaryCards({ data }: SummaryCardsProps) {
       titleClassName: "text-yellow-900",
       linkClassName: "text-yellow-800",
       valueClassName: "text-yellow-700",
+      valueSizeClassName: "text-xl",
     },
     {
       title: "Lab Trend",
@@ -76,17 +91,7 @@ export function SummaryCards({ data }: SummaryCardsProps) {
       titleClassName: "text-green-900",
       linkClassName: "text-green-800",
       valueClassName: "text-green-700",
-    },
-    {
-      title: "Confidence",
-      linkLabel: avgConfidence !== null && avgConfidence >= 80 ? "High" : "Review",
-      value: avgConfidence !== null ? `${avgConfidence}%` : "—",
-      icon: BadgeCheck,
-      cardClassName: "bg-slate-100 border-slate-200",
-      iconWrapClassName: "bg-blue-100 text-blue-700",
-      titleClassName: "text-slate-900",
-      linkClassName: "text-slate-500",
-      valueClassName: "text-blue-700",
+      valueSizeClassName: "text-xl",
     },
   ];
 
@@ -114,7 +119,9 @@ export function SummaryCards({ data }: SummaryCardsProps) {
               </button>
             </div>
           </div>
-          <span className={`text-xl font-bold ${card.valueClassName}`}>{card.value}</span>
+          <span className={`font-bold ${card.valueSizeClassName} ${card.valueClassName}`}>
+            {card.value}
+          </span>
         </div>
       ))}
     </div>

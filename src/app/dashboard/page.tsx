@@ -1,5 +1,4 @@
 import { AskAiCard } from "@/components/dashboard/ask-ai-card";
-import { CurrentMedicationsCard } from "@/components/dashboard/current-medications-card";
 import { HealthTimelineCard } from "@/components/dashboard/health-timeline-card";
 import { LabTrendsCard } from "@/components/dashboard/lab-trends-card";
 import { SafetyAlertsCard } from "@/components/dashboard/safety-alerts-card";
@@ -45,7 +44,6 @@ export default async function DashboardPage() {
             conflictingDosage={documentsData?.cross_check_report?.conflicting_dosage_instructions ?? []}
             allergyConflicts={documentsData?.cross_check_report?.allergy_conflicts ?? []}
           />
-          <CurrentMedicationsCard medications={documentsData?.timeline?.medications_timeline ?? []} />
           <AskAiCard />
         </div>
       </div>
