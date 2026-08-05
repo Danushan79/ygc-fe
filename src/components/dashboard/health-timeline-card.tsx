@@ -1,37 +1,11 @@
-import { ArrowUp, FileText, FlaskConical, ListFilter, Pill, Stethoscope } from "lucide-react";
+import { ArrowUp, FileText, FlaskConical, ListFilter, Pill } from "lucide-react";
 import type { DocumentVisit } from "@/types/document";
+import { toSortableTime } from "@/utils/date";
+import { formatDocumentType, iconForDocumentType } from "@/utils/document-type";
 import { formatLabResult } from "@/utils/lab-result";
 
 interface HealthTimelineCardProps {
   visits: DocumentVisit[];
-}
-
-function iconForDocumentType(documentType: string) {
-  const normalized = documentType.toLowerCase();
-  if (normalized.includes("prescription")) return Pill;
-  if (normalized.includes("lab")) return FlaskConical;
-  return Stethoscope;
-}
-
-function formatDocumentType(documentType: string) {
-  return documentType
-    .split("_")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
-}
-
-function toSortableTime(dateStr: string): number {
-  const native = new Date(dateStr);
-  if (!Number.isNaN(native.getTime())) return native.getTime();
-
-  const match = dateStr.trim().match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/);
-  if (match) {
-    const [, day, month, year] = match;
-    const parsed = new Date(Number(year), Number(month) - 1, Number(day));
-    if (!Number.isNaN(parsed.getTime())) return parsed.getTime();
-  }
-
-  return 0;
 }
 
 export function HealthTimelineCard({ visits }: HealthTimelineCardProps) {

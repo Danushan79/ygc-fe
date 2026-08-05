@@ -1,26 +1,13 @@
 "use client";
 
-import {
-  Activity,
-  FileText,
-  History,
-  LayoutDashboard,
-  MessageCircle,
-  Pill,
-  TriangleAlert,
-} from "lucide-react";
+import { FileText, LayoutDashboard } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { LucideIcon } from "lucide-react";
 
 const NAV_ITEMS: { label: string; href: string; icon: LucideIcon }[] = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Timeline", href: "/dashboard/timeline", icon: History },
-  { label: "Medications", href: "/dashboard/medications", icon: Pill },
-  { label: "Lab Trends", href: "/dashboard/lab-trends", icon: Activity },
-  { label: "Documents", href: "/dashboard/documents", icon: FileText },
-  { label: "Safety Alerts", href: "/dashboard/safety-alerts", icon: TriangleAlert },
-  { label: "Ask Questions", href: "/dashboard/ask-questions", icon: MessageCircle },
+  { label: "Documents", href: "/documents", icon: FileText },
 ];
 
 export function DashboardSidebar() {
