@@ -50,12 +50,6 @@ export default function Home() {
           >
             Sign In
           </Link>
-          <button
-            type="button"
-            className="rounded-lg border border-slate-300 bg-white px-8 py-3 font-semibold text-blue-900 transition-colors hover:bg-slate-50"
-          >
-            Continue as Guest
-          </button>
         </div>
       </div>
 

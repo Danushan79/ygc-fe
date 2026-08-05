@@ -1,4 +1,3 @@
-import { Lock } from "lucide-react";
 import type { ReactNode } from "react";
 
 export function AuthShell({
@@ -25,11 +24,6 @@ export function AuthShell({
 
         <div className="mt-8 rounded-2xl border border-slate-100 bg-white p-8 shadow-lg shadow-slate-200/50">
           {children}
-        </div>
-
-        <div className="mt-6 flex items-center justify-center gap-2 text-sm text-slate-500">
-          <Lock className="h-4 w-4 text-emerald-600" strokeWidth={2} />
-          <span>Your medical data is encrypted and protected.</span>
         </div>
       </div>
     </div>

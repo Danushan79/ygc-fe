@@ -109,11 +109,6 @@ export default function SignInPage() {
           onChange={(event) => setPassword(event.target.value)}
           error={errors.password}
           disabled={isSubmitting}
-          labelExtra={
-            <button type="button" className="text-sm font-semibold text-blue-800 hover:underline">
-              Forgot Password?
-            </button>
-          }
         />
 
         <button
