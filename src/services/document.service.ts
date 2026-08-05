@@ -1,6 +1,32 @@
 import { env } from "@/config/env";
+import { connectToDatabase } from "@/lib/db";
 import { HttpError } from "@/lib/http-error";
+import { DocumentRecord, PatientSnapshot } from "@/models/document.model";
 import type { UploadDocumentsResult } from "@/types/document";
+
+async function parseJsonResponse(response: Response): Promise<unknown> {
+  try {
+    return await response.json();
+  } catch {
+    return null;
+  }
+}
+
+function extractErrorMessage(payload: unknown, fallback: string) {
+  if (payload && typeof payload === "object" && "message" in payload) {
+    return String((payload as { message: unknown }).message);
+  }
+
+  return fallback;
+}
+
+function extractData(payload: unknown): UploadDocumentsResult {
+  if (payload && typeof payload === "object" && "data" in payload) {
+    return (payload as { data: UploadDocumentsResult }).data;
+  }
+
+  return payload as UploadDocumentsResult;
+}
 
 export async function uploadDocuments(
   formData: FormData,
@@ -20,20 +46,40 @@ export async function uploadDocuments(
     throw new HttpError(502, "Unable to reach the documents service. Please try again.");
   }
 
-  let payload: unknown = null;
-  try {
-    payload = await response.json();
-  } catch {
-    payload = null;
-  }
+  const payload = await parseJsonResponse(response);
 
   if (!response.ok) {
-    const message =
-      payload && typeof payload === "object" && "message" in payload
-        ? String((payload as { message: unknown }).message)
-        : "Failed to upload documents. Please try again.";
-    throw new HttpError(response.status, message);
+    throw new HttpError(response.status, extractErrorMessage(payload, "Failed to upload documents. Please try again."));
   }
 
-  return (payload as UploadDocumentsResult) ?? {};
+  return extractData(payload);
+}
+
+export async function getDocuments(userId: string): Promise<UploadDocumentsResult | null> {
+  await connectToDatabase();
+
+  const snapshot = await PatientSnapshot.findOne({ user_id: userId }).lean<{
+    user_id: string;
+    patient_timeline: UploadDocumentsResult["timeline"];
+    cross_check_report: UploadDocumentsResult["cross_check_report"];
+  } | null>();
+
+  console.log("[getDocuments] userId:", userId, "snapshot found:", Boolean(snapshot));
+
+  if (!snapshot) {
+    return null;
+  }
+
+  const documentsTotal = await DocumentRecord.countDocuments({ user_id: userId });
+
+  const result: UploadDocumentsResult = {
+    user_id: snapshot.user_id,
+    documents_total: documentsTotal,
+    timeline: snapshot.patient_timeline,
+    cross_check_report: snapshot.cross_check_report,
+  };
+
+  console.log("[getDocuments] visits:", result.timeline?.visits?.length ?? 0, "documents_total:", documentsTotal);
+
+  return result;
 }

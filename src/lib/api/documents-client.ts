@@ -1,4 +1,4 @@
-import { sendFormData } from "@/lib/api/http-client";
+import { sendFormData, sendJson } from "@/lib/api/http-client";
 import type { UploadDocumentsResult } from "@/types/document";
 
 export { ApiRequestError } from "@/lib/api/http-client";
@@ -10,4 +10,8 @@ export function uploadDocumentsRequest(files: File[]): Promise<UploadDocumentsRe
   }
 
   return sendFormData<UploadDocumentsResult>("/api/documents", formData);
+}
+
+export function getDocumentsRequest(): Promise<UploadDocumentsResult> {
+  return sendJson<UploadDocumentsResult>("/api/documents", "GET");
 }

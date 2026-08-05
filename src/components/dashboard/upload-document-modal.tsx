@@ -1,6 +1,7 @@
 "use client";
 
 import { CloudUpload, FileText, Info, Loader2, Trash2, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { type ChangeEvent, type DragEvent, useEffect, useRef, useState } from "react";
 import { FormBanner } from "@/components/auth/form-banner";
 import { ApiRequestError, uploadDocumentsRequest } from "@/lib/api/documents-client";
@@ -16,11 +17,11 @@ function formatFileSize(bytes: number): string {
 }
 
 export function UploadDocumentModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const router = useRouter();
   const [files, setFiles] = useState<File[]>([]);
   const [isDragActive, setIsDragActive] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
-  const [success, setSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   function handleClose() {
@@ -30,7 +31,6 @@ export function UploadDocumentModal({ open, onClose }: { open: boolean; onClose:
     setFiles([]);
     setError(null);
     setIsDragActive(false);
-    setSuccess(false);
     onClose();
   }
 
@@ -43,14 +43,14 @@ export function UploadDocumentModal({ open, onClose }: { open: boolean; onClose:
     setIsUploading(true);
     try {
       await uploadDocumentsRequest(files);
+      setIsUploading(false);
       setFiles([]);
-      setSuccess(true);
-      setTimeout(handleClose, 1200);
+      onClose();
+      router.refresh();
     } catch (err) {
       setError(
         err instanceof ApiRequestError ? err.message : "Something went wrong. Please try again."
       );
-    } finally {
       setIsUploading(false);
     }
   }
@@ -202,12 +202,6 @@ export function UploadDocumentModal({ open, onClose }: { open: boolean; onClose:
               onChange={handleBrowseChange}
             />
           </div>
-
-          {success && (
-            <div className="mt-3">
-              <FormBanner tone="success">Documents uploaded successfully.</FormBanner>
-            </div>
-          )}
 
           {error && (
             <div className="mt-3">

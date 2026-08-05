@@ -5,10 +5,19 @@ import { LabTrendsCard } from "@/components/dashboard/lab-trends-card";
 import { SafetyAlertsCard } from "@/components/dashboard/safety-alerts-card";
 import { SummaryCards } from "@/components/dashboard/summary-cards";
 import { getCurrentUser, requireSession } from "@/lib/auth/session";
+import { getDocuments } from "@/services/document.service";
 
 export default async function DashboardPage() {
-  await requireSession();
+  const session = await requireSession();
   const user = await getCurrentUser();
+
+  let documentsData = null;
+  try {
+    documentsData = await getDocuments(session.sub);
+  } catch (error) {
+    console.error("Failed to load dashboard document data:", error);
+    documentsData = null;
+  }
 
   return (
     <div className="flex h-full flex-col">
@@ -21,17 +30,22 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      <SummaryCards />
+      <SummaryCards data={documentsData} />
 
       <div className="flex min-h-0 flex-1 gap-4">
         <div className="flex h-full min-w-0 flex-[2] flex-col gap-4">
-          <HealthTimelineCard />
-          <LabTrendsCard />
+          <HealthTimelineCard visits={documentsData?.timeline?.visits ?? []} />
+          <LabTrendsCard labResults={documentsData?.timeline?.lab_results_timeline ?? []} />
         </div>
 
         <div className="flex h-full w-full max-w-sm min-w-0 flex-1 flex-col gap-4 overflow-y-auto pr-1">
-          <SafetyAlertsCard />
-          <CurrentMedicationsCard />
+          <SafetyAlertsCard
+            interactions={documentsData?.cross_check_report?.potential_drug_interactions ?? []}
+            duplicates={documentsData?.cross_check_report?.duplicate_prescriptions ?? []}
+            conflictingDosage={documentsData?.cross_check_report?.conflicting_dosage_instructions ?? []}
+            allergyConflicts={documentsData?.cross_check_report?.allergy_conflicts ?? []}
+          />
+          <CurrentMedicationsCard medications={documentsData?.timeline?.medications_timeline ?? []} />
           <AskAiCard />
         </div>
       </div>

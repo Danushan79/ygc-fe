@@ -1,16 +1,63 @@
 import { TriangleAlert } from "lucide-react";
+import type { CrossCheckIssue, DuplicatePrescription, PotentialDrugInteraction } from "@/types/document";
 
-interface Alert {
-  title: string;
-  description: string;
+interface SafetyAlertsCardProps {
+  interactions: PotentialDrugInteraction[];
+  duplicates: DuplicatePrescription[];
+  conflictingDosage: CrossCheckIssue[];
+  allergyConflicts: CrossCheckIssue[];
 }
 
-const ALERTS: Alert[] = [
-  { title: "Drug Interaction", description: "Ibuprofen may reduce effect of Lisinopril." },
-  { title: "Allergy Conflict", description: "Allergy to Penicillin recorded. Be cautious." },
-];
+function describeIssue(issue: CrossCheckIssue): string {
+  if (typeof issue === "string") {
+    return issue;
+  }
+  return issue.explanation ?? issue.medication ?? "Details unavailable.";
+}
 
-export function SafetyAlertsCard() {
+interface Alert {
+  key: string;
+  title: string;
+  description: string;
+  severity?: string;
+}
+
+const SEVERITY_STYLES: Record<string, string> = {
+  high: "border-red-300 bg-red-100",
+  moderate: "border-red-200 bg-red-50",
+  low: "border-orange-200 bg-orange-50",
+};
+
+export function SafetyAlertsCard({
+  interactions,
+  duplicates,
+  conflictingDosage,
+  allergyConflicts,
+}: SafetyAlertsCardProps) {
+  const alerts: Alert[] = [
+    ...interactions.map((interaction, index) => ({
+      key: `interaction-${index}`,
+      title: `Drug Interaction: ${interaction.medications_involved.join(" + ")}`,
+      description: interaction.explanation,
+      severity: interaction.severity,
+    })),
+    ...duplicates.map((duplicate, index) => ({
+      key: `duplicate-${index}`,
+      title: `Duplicate Prescription: ${duplicate.medication}`,
+      description: `${duplicate.explanation} (${duplicate.occurrences.length} occurrences)`,
+    })),
+    ...conflictingDosage.map((conflict, index) => ({
+      key: `dosage-${index}`,
+      title: "Conflicting Dosage",
+      description: describeIssue(conflict),
+    })),
+    ...allergyConflicts.map((conflict, index) => ({
+      key: `allergy-${index}`,
+      title: "Allergy Conflict",
+      description: describeIssue(conflict),
+    })),
+  ];
+
   return (
     <div className="flex-shrink-0 rounded-lg border border-slate-200 bg-white shadow-sm">
       <div className="flex items-center justify-between rounded-t-lg border-b border-slate-200 bg-red-50 p-2.5">
@@ -19,20 +66,29 @@ export function SafetyAlertsCard() {
           Safety Alerts
         </h3>
         <span className="rounded-full bg-red-600 px-1.5 py-0.5 text-[10px] font-bold text-white">
-          {ALERTS.length}
+          {alerts.length}
         </span>
       </div>
 
       <div className="space-y-2 p-2.5">
-        {ALERTS.map((alert) => (
-          <div key={alert.title} className="rounded border border-red-200 bg-red-50 p-2">
-            <h4 className="mb-0.5 flex items-center gap-1 text-xs font-semibold text-red-700">
-              <TriangleAlert className="h-3.5 w-3.5" strokeWidth={2} />
-              {alert.title}
-            </h4>
-            <p className="text-[11px] leading-tight text-slate-900">{alert.description}</p>
-          </div>
-        ))}
+        {alerts.length === 0 ? (
+          <p className="p-1 text-xs text-slate-500">No safety alerts found.</p>
+        ) : (
+          alerts.map((alert) => (
+            <div
+              key={alert.key}
+              className={`rounded border p-2 ${
+                (alert.severity && SEVERITY_STYLES[alert.severity]) ?? "border-red-200 bg-red-50"
+              }`}
+            >
+              <h4 className="mb-0.5 flex items-center gap-1 text-xs font-semibold text-red-700">
+                <TriangleAlert className="h-3.5 w-3.5" strokeWidth={2} />
+                {alert.title}
+              </h4>
+              <p className="text-[11px] leading-tight text-slate-900">{alert.description}</p>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

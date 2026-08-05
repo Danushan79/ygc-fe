@@ -1,7 +1,25 @@
-import { getSessionWithToken } from "@/lib/auth/session";
+import { getSession, getSessionWithToken } from "@/lib/auth/session";
 import { HttpError } from "@/lib/http-error";
-import { uploadDocuments } from "@/services/document.service";
+import { getDocuments, uploadDocuments } from "@/services/document.service";
 import { apiError, apiSuccess } from "@/utils/api-response";
+
+export async function GET() {
+  const session = await getSession();
+  if (!session) {
+    return apiError("You must be signed in.", 401);
+  }
+
+  try {
+    const result = await getDocuments(session.sub);
+    return apiSuccess(result);
+  } catch (error) {
+    if (error instanceof HttpError) {
+      return apiError(error.message, error.status);
+    }
+    console.error("Document fetch failed:", error);
+    return apiError("Something went wrong. Please try again.", 500);
+  }
+}
 
 export async function POST(request: Request) {
   const auth = await getSessionWithToken();
