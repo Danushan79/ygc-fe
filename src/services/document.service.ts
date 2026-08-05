@@ -17,6 +17,20 @@ function extractErrorMessage(payload: unknown, fallback: string) {
     return String((payload as { message: unknown }).message);
   }
 
+  if (payload && typeof payload === "object" && "detail" in payload) {
+    const detail = (payload as { detail: unknown }).detail;
+    if (typeof detail === "string") {
+      return detail;
+    }
+    if (Array.isArray(detail)) {
+      return detail
+        .map((item) =>
+          item && typeof item === "object" && "msg" in item ? String((item as { msg: unknown }).msg) : String(item)
+        )
+        .join("; ");
+    }
+  }
+
   return fallback;
 }
 
@@ -49,6 +63,7 @@ export async function uploadDocuments(
   const payload = await parseJsonResponse(response);
 
   if (!response.ok) {
+    console.error("[uploadDocuments] external API error:", response.status, JSON.stringify(payload));
     throw new HttpError(response.status, extractErrorMessage(payload, "Failed to upload documents. Please try again."));
   }
 
