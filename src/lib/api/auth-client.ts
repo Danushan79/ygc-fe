@@ -1,5 +1,7 @@
 import { sendJson } from "@/lib/api/http-client";
 import type {
+  AccessTokenDto,
+  AccessTokenRequestBody,
   AuthUserDto,
   SignInRequestBody,
   SignUpRequestBody,
@@ -14,6 +16,10 @@ export function signUpRequest(body: SignUpRequestBody): Promise<AuthUserDto> {
 
 export function signInRequest(body: SignInRequestBody): Promise<AuthUserDto> {
   return sendJson<AuthUserDto>("/api/auth/signin", "POST", body);
+}
+
+export function createAccessTokenRequest(body: AccessTokenRequestBody): Promise<AccessTokenDto> {
+  return sendJson<AccessTokenDto>("/api/auth/token", "POST", body);
 }
 
 export function updateProfileRequest(body: UpdateProfileRequestBody): Promise<AuthUserDto> {

@@ -4,9 +4,15 @@ import { signAuthToken } from "@/lib/auth/jwt";
 import { uploadAvatar } from "@/lib/cloudinary";
 import { HttpError } from "@/lib/http-error";
 import { User, type UserDocument } from "@/models/user.model";
-import { MAX_AVATAR_DATA_URL_LENGTH, MIN_PASSWORD_LENGTH } from "@/constants/auth";
+import {
+  AUTH_TOKEN_TTL_SECONDS,
+  MAX_AVATAR_DATA_URL_LENGTH,
+  MIN_PASSWORD_LENGTH,
+} from "@/constants/auth";
 import { isValidEmail, isValidMobile } from "@/utils/validation";
 import type {
+  AccessTokenDto,
+  AccessTokenRequestBody,
   AuthUserDto,
   SignInRequestBody,
   SignUpRequestBody,
@@ -111,6 +117,23 @@ export async function signIn(body: SignInRequestBody): Promise<AuthResult> {
 
   const token = signAuthToken({ sub: user._id.toString(), email: user.email, role: user.role });
   return { user: toAuthUserDto(user), token };
+}
+
+/**
+ * Verifies login credentials and mints an access token for API clients that
+ * send `Authorization: Bearer <token>` instead of using the session cookie.
+ */
+export async function createAccessToken(body: AccessTokenRequestBody): Promise<AccessTokenDto> {
+  const { user, token } = await signIn(body);
+
+  return {
+    accessToken: token,
+    tokenType: "Bearer",
+    expiresIn: AUTH_TOKEN_TTL_SECONDS,
+    expiresAt: new Date(Date.now() + AUTH_TOKEN_TTL_SECONDS * 1000).toISOString(),
+    userId: user.id,
+    user,
+  };
 }
 
 export async function updateProfile(

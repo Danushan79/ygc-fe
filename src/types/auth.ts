@@ -10,6 +10,9 @@ export interface SignInRequestBody {
   password: string;
 }
 
+/** Login credentials exchanged for an access token at `POST /api/auth/token`. */
+export type AccessTokenRequestBody = SignInRequestBody;
+
 export interface UpdateProfileRequestBody {
   fullName?: string;
   avatarUrl?: string;
@@ -26,4 +29,15 @@ export interface AuthUserDto {
   mobile?: string;
   role: UserRole;
   avatarUrl?: string;
+}
+
+export interface AccessTokenDto {
+  accessToken: string;
+  tokenType: "Bearer";
+  /** Lifetime of the access token in seconds. */
+  expiresIn: number;
+  expiresAt: string;
+  /** Id of the authenticated user — same value as `user.id` and the token's `sub` claim. */
+  userId: string;
+  user: AuthUserDto;
 }
