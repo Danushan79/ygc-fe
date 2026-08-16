@@ -29,6 +29,12 @@ function extractErrorMessage(payload: unknown, fallback: string) {
         )
         .join("; ");
     }
+    // FastAPI's `raise HTTPException(status, {...})` puts a structured
+    // object under `detail` (e.g. identity_guard.py's mismatch payload,
+    // which carries its own "message" field).
+    if (detail && typeof detail === "object" && "message" in detail) {
+      return String((detail as { message: unknown }).message);
+    }
   }
 
   return fallback;

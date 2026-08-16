@@ -1,10 +1,11 @@
 "use client";
 
-import { CloudUpload, FileText, Info, Loader2, Trash2, X } from "lucide-react";
+import { AlertTriangle, CloudUpload, FileText, Info, Loader2, Trash2, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { type ChangeEvent, type DragEvent, useEffect, useRef, useState } from "react";
 import { FormBanner } from "@/components/auth/form-banner";
 import { ApiRequestError, uploadDocumentsRequest } from "@/lib/api/documents-client";
+import { filesForHeldDocuments, type IdentityReviewNeeded } from "@/types/identity-mismatch";
 
 const MAX_FILE_SIZE_BYTES = 20 * 1024 * 1024;
 const ACCEPTED_MIME_TYPES = ["application/pdf", "image/jpeg", "image/png"];
@@ -22,6 +23,11 @@ export function UploadDocumentModal({ open, onClose }: { open: boolean; onClose:
   const [isDragActive, setIsDragActive] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  // Set after a successful upload that held some document(s) back pending
+  // confirmation (matched documents from that same upload are already
+  // saved — this is a follow-up step, not a blocking failure).
+  const [review, setReview] = useState<IdentityReviewNeeded | null>(null);
+  const [heldFiles, setHeldFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   function handleClose() {
@@ -30,28 +36,43 @@ export function UploadDocumentModal({ open, onClose }: { open: boolean; onClose:
     }
     setFiles([]);
     setError(null);
+    setReview(null);
+    setHeldFiles([]);
     setIsDragActive(false);
     onClose();
   }
 
-  async function handleUpload() {
-    if (files.length === 0 || isUploading) {
+  async function handleUpload(confirmMismatch = false, filesOverride?: File[]) {
+    const filesToSend = filesOverride ?? files;
+    if (filesToSend.length === 0 || isUploading) {
       return;
     }
 
     setError(null);
     setIsUploading(true);
     try {
-      await uploadDocumentsRequest(files);
+      const result = await uploadDocumentsRequest(filesToSend, { confirmNameMismatch: confirmMismatch });
       setIsUploading(false);
+
+      // Some document(s) matched and are already saved; the rest were held
+      // back and need explicit confirmation before they're added too.
+      if (result.identity_review_needed && !confirmMismatch) {
+        setReview(result.identity_review_needed);
+        setHeldFiles(filesForHeldDocuments(filesToSend, result.identity_review_needed));
+        router.refresh();
+        return;
+      }
+
+      setReview(null);
+      setHeldFiles([]);
       setFiles([]);
       onClose();
       router.refresh();
     } catch (err) {
+      setIsUploading(false);
       setError(
         err instanceof ApiRequestError ? err.message : "Something went wrong. Please try again."
       );
-      setIsUploading(false);
     }
   }
 
@@ -135,7 +156,7 @@ export function UploadDocumentModal({ open, onClose }: { open: boolean; onClose:
       >
         <div className="flex items-center justify-between border-b border-slate-200 p-4">
           <h3 id="upload-modal-title" className="text-base font-semibold text-slate-900">
-            Upload Medical Documents
+            {review ? "Some Documents Need Review" : "Upload Medical Documents"}
           </h3>
           <button
             type="button"
@@ -162,111 +183,171 @@ export function UploadDocumentModal({ open, onClose }: { open: boolean; onClose:
             </div>
           )}
 
-          <div
-            onDragOver={(event) => {
-              event.preventDefault();
-              if (!isUploading) setIsDragActive(true);
-            }}
-            onDragLeave={() => setIsDragActive(false)}
-            onDrop={isUploading ? undefined : handleDrop}
-            onClick={() => !isUploading && fileInputRef.current?.click()}
-            className={`flex cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border-2 border-dashed p-8 transition-colors ${
-              isDragActive
-                ? "border-blue-600 bg-blue-50"
-                : "border-slate-300 bg-slate-50 hover:bg-slate-100"
-            }`}
-          >
-            <CloudUpload className="h-8 w-8 text-blue-700" strokeWidth={2} />
-            <div className="text-center">
-              <p className="text-sm text-slate-900">Drag &amp; Drop files here</p>
-              <p className="text-xs text-slate-500">or</p>
-            </div>
-            <button
-              type="button"
-              disabled={isUploading}
-              onClick={(event) => {
-                event.stopPropagation();
-                fileInputRef.current?.click();
-              }}
-              className="rounded-lg bg-blue-700 px-4 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              Browse Files
-            </button>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept={ACCEPTED_EXTENSIONS}
-              multiple
-              disabled={isUploading}
-              className="hidden"
-              onChange={handleBrowseChange}
-            />
-          </div>
+          {review ? (
+            <div className="space-y-3">
+              <div className="flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 p-3">
+                <AlertTriangle className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-600" strokeWidth={2} />
+                <p className="text-sm text-amber-900">{review.message}</p>
+              </div>
 
-          {error && (
-            <div className="mt-3">
-              <FormBanner tone="error">{error}</FormBanner>
-            </div>
-          )}
-
-          {files.length > 0 && (
-            <ul className="mt-4 space-y-2">
-              {files.map((file, index) => (
-                <li
-                  key={`${file.name}-${index}`}
-                  className="flex items-center justify-between gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2"
-                >
-                  <div className="flex min-w-0 items-center gap-2">
-                    <FileText className="h-4 w-4 flex-shrink-0 text-blue-700" strokeWidth={2} />
-                    <span className="truncate text-sm text-slate-900">{file.name}</span>
-                    <span className="flex-shrink-0 text-xs text-slate-500">
-                      {formatFileSize(file.size)}
-                    </span>
-                  </div>
-                  <button
-                    type="button"
-                    aria-label={`Remove ${file.name}`}
-                    disabled={isUploading}
-                    onClick={() => removeFile(index)}
-                    className="flex-shrink-0 rounded p-1 text-slate-400 transition-colors hover:bg-slate-200 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-40"
+              <ul className="space-y-2">
+                {review.held_documents.map((doc, docIndex) => (
+                  <li
+                    key={`${doc.patient_name ?? "unknown"}-${docIndex}`}
+                    className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm"
                   >
-                    <Trash2 className="h-4 w-4" strokeWidth={2} />
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
+                    <p className="font-medium text-slate-900">{doc.patient_name ?? "Unknown patient"}</p>
+                    <p className="text-xs text-slate-500">{doc.source_files.join(", ")}</p>
+                    <ul className="mt-1 space-y-1">
+                      {doc.signals.map((signal, signalIndex) => (
+                        <li key={`${signal.field}-${signalIndex}`} className="text-xs text-slate-600">
+                          <span className="font-medium capitalize">{signal.field}:</span>{" "}
+                          {signal.explanation}
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                ))}
+              </ul>
 
-          <div className="mt-4 space-y-1">
-            <p className="flex items-center gap-1 text-xs text-slate-500">
-              <Info className="h-3.5 w-3.5" strokeWidth={2} />
-              Supported formats: PDF, JPG, PNG
-            </p>
-            <p className="flex items-center gap-1 text-xs text-slate-500">
-              <Info className="h-3.5 w-3.5" strokeWidth={2} />
-              Maximum file size: 20MB
-            </p>
-          </div>
+              <p className="text-xs text-slate-500">
+                These document(s) weren&apos;t added because they don&apos;t match the patient on
+                your other documents. If they really do belong to you, confirm to add them anyway.
+              </p>
+            </div>
+          ) : (
+            <>
+              <div
+                onDragOver={(event) => {
+                  event.preventDefault();
+                  if (!isUploading) setIsDragActive(true);
+                }}
+                onDragLeave={() => setIsDragActive(false)}
+                onDrop={isUploading ? undefined : handleDrop}
+                onClick={() => !isUploading && fileInputRef.current?.click()}
+                className={`flex cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border-2 border-dashed p-8 transition-colors ${
+                  isDragActive
+                    ? "border-blue-600 bg-blue-50"
+                    : "border-slate-300 bg-slate-50 hover:bg-slate-100"
+                }`}
+              >
+                <CloudUpload className="h-8 w-8 text-blue-700" strokeWidth={2} />
+                <div className="text-center">
+                  <p className="text-sm text-slate-900">Drag &amp; Drop files here</p>
+                  <p className="text-xs text-slate-500">or</p>
+                </div>
+                <button
+                  type="button"
+                  disabled={isUploading}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    fileInputRef.current?.click();
+                  }}
+                  className="rounded-lg bg-blue-700 px-4 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  Browse Files
+                </button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept={ACCEPTED_EXTENSIONS}
+                  multiple
+                  disabled={isUploading}
+                  className="hidden"
+                  onChange={handleBrowseChange}
+                />
+              </div>
+
+              {error && (
+                <div className="mt-3">
+                  <FormBanner tone="error">{error}</FormBanner>
+                </div>
+              )}
+
+              {files.length > 0 && (
+                <ul className="mt-4 space-y-2">
+                  {files.map((file, index) => (
+                    <li
+                      key={`${file.name}-${index}`}
+                      className="flex items-center justify-between gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2"
+                    >
+                      <div className="flex min-w-0 items-center gap-2">
+                        <FileText className="h-4 w-4 flex-shrink-0 text-blue-700" strokeWidth={2} />
+                        <span className="truncate text-sm text-slate-900">{file.name}</span>
+                        <span className="flex-shrink-0 text-xs text-slate-500">
+                          {formatFileSize(file.size)}
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        aria-label={`Remove ${file.name}`}
+                        disabled={isUploading}
+                        onClick={() => removeFile(index)}
+                        className="flex-shrink-0 rounded p-1 text-slate-400 transition-colors hover:bg-slate-200 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        <Trash2 className="h-4 w-4" strokeWidth={2} />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              <div className="mt-4 space-y-1">
+                <p className="flex items-center gap-1 text-xs text-slate-500">
+                  <Info className="h-3.5 w-3.5" strokeWidth={2} />
+                  Supported formats: PDF, JPG, PNG
+                </p>
+                <p className="flex items-center gap-1 text-xs text-slate-500">
+                  <Info className="h-3.5 w-3.5" strokeWidth={2} />
+                  Maximum file size: 20MB
+                </p>
+              </div>
+            </>
+          )}
         </div>
 
         <div className="flex items-center justify-end gap-3 bg-slate-50 p-4">
-          <button
-            type="button"
-            onClick={handleClose}
-            disabled={isUploading}
-            className="rounded-lg px-4 py-2 text-sm font-semibold text-blue-800 transition-colors hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            Cancel
-          </button>
-          <button
-            type="button"
-            disabled={files.length === 0 || isUploading}
-            onClick={handleUpload}
-            className="flex items-center gap-2 rounded-lg bg-blue-700 px-6 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {isUploading && <Loader2 className="h-4 w-4 animate-spin" strokeWidth={2} />}
-            {isUploading ? "Uploading..." : "Upload"}
-          </button>
+          {review ? (
+            <>
+              <button
+                type="button"
+                onClick={handleClose}
+                disabled={isUploading}
+                className="rounded-lg px-4 py-2 text-sm font-semibold text-blue-800 transition-colors hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Not Now
+              </button>
+              <button
+                type="button"
+                disabled={isUploading || heldFiles.length === 0}
+                onClick={() => handleUpload(true, heldFiles)}
+                className="flex items-center gap-2 rounded-lg bg-amber-600 px-6 py-2 text-sm font-semibold text-white transition-colors hover:bg-amber-700 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {isUploading && <Loader2 className="h-4 w-4 animate-spin" strokeWidth={2} />}
+                {isUploading ? "Uploading..." : "Add Anyway"}
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={handleClose}
+                disabled={isUploading}
+                className="rounded-lg px-4 py-2 text-sm font-semibold text-blue-800 transition-colors hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={files.length === 0 || isUploading}
+                onClick={() => handleUpload(false)}
+                className="flex items-center gap-2 rounded-lg bg-blue-700 px-6 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {isUploading && <Loader2 className="h-4 w-4 animate-spin" strokeWidth={2} />}
+                {isUploading ? "Uploading..." : "Upload"}
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

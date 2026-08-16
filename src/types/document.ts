@@ -102,4 +102,8 @@ export interface UploadDocumentsResult {
   cross_check_report: CrossCheckReport;
   lab_trends?: LabTrendsResult;
   indexed?: boolean;
+  /** Present when one or more uploaded documents were held back because
+   * their extracted patient identity didn't match this account's document
+   * history — see IdentityReviewNeeded in identity-mismatch.ts. */
+  identity_review_needed?: import("./identity-mismatch").IdentityReviewNeeded;
 }
