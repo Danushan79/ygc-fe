@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { DoctorRecommendationCard } from "@/components/dashboard/doctor-recommendation-card";
 import { HealthTimelineCard } from "@/components/dashboard/health-timeline-card";
 import { LabTrendsCard } from "@/components/dashboard/lab-trends-card";
 import { SafetyAlertsCard } from "@/components/dashboard/safety-alerts-card";
@@ -49,6 +50,7 @@ export function DashboardTabs({ documentsData }: DashboardTabsProps) {
             <LabTrendsCard
               labResults={documentsData?.timeline?.lab_results_timeline ?? []}
               trends={documentsData?.lab_trends?.trends ?? []}
+              singleResults={documentsData?.lab_trends?.single_results ?? []}
             />
 
             <SafetyAlertsCard
@@ -58,6 +60,8 @@ export function DashboardTabs({ documentsData }: DashboardTabsProps) {
               allergyConflicts={documentsData?.cross_check_report?.allergy_conflicts ?? []}
             />
           </div>
+
+          <DoctorRecommendationCard consultTriage={documentsData?.consult_triage} />
         </div>
       ) : (
         <div className="flex min-h-0 flex-1 flex-col">
