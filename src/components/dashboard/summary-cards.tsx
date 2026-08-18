@@ -41,10 +41,8 @@ export function SummaryCards({ data }: SummaryCardsProps) {
 
   const labTrendCount = (timeline?.lab_results_timeline ?? []).filter(isLabResultFlagged).length;
 
-  // Confidence in the cross-check ANALYSIS (drug interactions, duplicates,
-  // dosage conflicts, allergy conflicts) — not the OCR/extraction confidence
-  // of the source documents (that's a separate, per-document quality signal
-  // used elsewhere, e.g. the "needs review" count on documents).
+  // Prefer confidence in the cross-check ANALYSIS (drug interactions,
+  // duplicates, dosage conflicts, allergy conflicts) when there is one.
   const analysisConfidences = [
     ...(crossCheck?.potential_drug_interactions ?? []).map((item) => item.confidence),
     ...(crossCheck?.duplicate_prescriptions ?? []).map((item) => item.confidence),
@@ -52,11 +50,21 @@ export function SummaryCards({ data }: SummaryCardsProps) {
     ...(crossCheck?.allergy_conflicts ?? []).map(issueConfidence),
   ].filter((confidence): confidence is number => typeof confidence === "number");
 
+  // When the cross-check found no issues, there's nothing to average above —
+  // fall back to the documents' own extraction confidence so the tile still
+  // shows a real number instead of "—" for the common all-clear case.
+  const extractionConfidences = (timeline?.visits ?? [])
+    .map((visit) => visit.overall_confidence)
+    .filter((confidence): confidence is number => typeof confidence === "number");
+
+  const confidenceSource =
+    analysisConfidences.length > 0 ? analysisConfidences : extractionConfidences;
+
   const avgConfidence =
-    analysisConfidences.length > 0
+    confidenceSource.length > 0
       ? Math.round(
-          (analysisConfidences.reduce((sum, confidence) => sum + confidence, 0) /
-            analysisConfidences.length) *
+          (confidenceSource.reduce((sum, confidence) => sum + confidence, 0) /
+            confidenceSource.length) *
             100,
         )
       : null;

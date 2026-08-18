@@ -84,6 +84,7 @@ export async function getDocuments(userId: string): Promise<UploadDocumentsResul
     patient_timeline: UploadDocumentsResult["timeline"];
     cross_check_report: UploadDocumentsResult["cross_check_report"];
     lab_trends?: UploadDocumentsResult["lab_trends"];
+    consult_triage?: UploadDocumentsResult["consult_triage"];
   } | null>();
 
   console.log("[getDocuments] userId:", userId, "snapshot found:", Boolean(snapshot));
@@ -100,6 +101,7 @@ export async function getDocuments(userId: string): Promise<UploadDocumentsResul
     timeline: snapshot.patient_timeline,
     cross_check_report: snapshot.cross_check_report,
     lab_trends: snapshot.lab_trends,
+    consult_triage: snapshot.consult_triage,
   };
 
   console.log("[getDocuments] visits:", result.timeline?.visits?.length ?? 0, "documents_total:", documentsTotal);

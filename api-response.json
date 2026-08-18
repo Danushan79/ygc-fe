@@ -1,0 +1,246 @@
+{
+    "success": true,
+    "data": {
+        "user_id": "6a81d29e3d18ce9591b43303",
+        "documents_added": 1,
+        "documents_total": 1,
+        "timeline": {
+            "visits": [
+                {
+                    "document_type": "prescription",
+                    "date": "2026-07-21",
+                    "document_language": "English",
+                    "additional_languages": [],
+                    "provider_or_doctor": "Dr. H. D. Amarasekara",
+                    "patient_name": "SACHINI",
+                    "patient_age": 49,
+                    "patient_gender": "female",
+                    "medications": [
+                        {
+                            "name": "Atorvastatin",
+                            "ingredients": [
+                                "Atorvastatin"
+                            ],
+                            "dosage": "1 tablet at night (nocte)",
+                            "frequency": "at night (once daily)",
+                            "duration": "3 months",
+                            "dosage_value": 10,
+                            "dosage_unit": "mg",
+                            "frequency_per_day": 1,
+                            "is_as_needed": false,
+                            "confidence": 0.85
+                        },
+                        {
+                            "name": "Levothyroxine sodium",
+                            "ingredients": [
+                                "Levothyroxine"
+                            ],
+                            "dosage": "1 tablet before breakfast — CONTINUE",
+                            "frequency": "once daily (before breakfast)",
+                            "duration": "3 months",
+                            "dosage_value": 75,
+                            "dosage_unit": "mcg",
+                            "frequency_per_day": 1,
+                            "is_as_needed": false,
+                            "confidence": 0.85
+                        },
+                        {
+                            "name": "Cholecalciferol (Vitamin D3)",
+                            "ingredients": [
+                                "Cholecalciferol"
+                            ],
+                            "dosage": "1 capsule once daily — maintenance dose",
+                            "frequency": "once daily",
+                            "duration": "3 months",
+                            "dosage_value": 1000,
+                            "dosage_unit": "IU",
+                            "frequency_per_day": 1,
+                            "is_as_needed": false,
+                            "confidence": 0.85
+                        },
+                        {
+                            "name": "Calcium carbonate + Vitamin D3",
+                            "ingredients": [
+                                "Calcium carbonate",
+                                "Cholecalciferol"
+                            ],
+                            "dosage": "1 tablet twice daily after meals",
+                            "frequency": "twice daily",
+                            "duration": "3 months",
+                            "dosage_value": 500,
+                            "dosage_unit": "mg",
+                            "frequency_per_day": 2,
+                            "is_as_needed": false,
+                            "confidence": 0.8
+                        }
+                    ],
+                    "lab_results": [],
+                    "allergies_noted": [],
+                    "clinical_notes": "Diagnosis/Complaint: Dyslipidaemia (LDL 172 mg/dL); Primary Hypothyroidism — stable; Vitamin D deficiency — corrected. Advice: dietary changes, exercise, report muscle pain/tenderness while on Atorvastatin; continue Levothyroxine regularly. Investigations: Fasting Lipid Profile, SGPT, TSH, Serum 25-OH Vitamin D in 3 months. Next review: Review in 3 months with reports.",
+                    "illegible_or_low_confidence_fields": [
+                        "dosage_value/dosage_unit for 'Calcium carbonate + Vitamin D3' reduced to 500 mg (document shows '500 mg / 250 IU' combination; single numeric dosage_value chosen for the mass component)",
+                        "quantity fields were read from printed table but not repeated individually in this extraction (visible on document)"
+                    ],
+                    "overall_confidence": 0.85,
+                    "ocr_confidence": 0.85,
+                    "translation_confidence": 0.95,
+                    "_source": {
+                        "file": "10_21-07-2026_dyslipidaemia.png",
+                        "method": "vision_ocr"
+                    },
+                    "content_sha256": "e7b87944aafc7a29022dcb74e70bc954d63286d2246c5a63b095f2282ba8e420",
+                    "document_url": "https://res.cloudinary.com/bikrdf7v/image/upload/v1786893038/mediscan/6a81d29e3d18ce9591b43303/10_21-07-2026_dyslipidaemia_png_7e056682.png",
+                    "cloudinary_public_id": "mediscan/6a81d29e3d18ce9591b43303/10_21-07-2026_dyslipidaemia_png_7e056682",
+                    "prescription_group": "rx-0"
+                }
+            ],
+            "medications_timeline": [
+                {
+                    "name": "Atorvastatin",
+                    "ingredients": [
+                        "Atorvastatin"
+                    ],
+                    "dosage": "1 tablet at night (nocte)",
+                    "frequency": "at night (once daily)",
+                    "duration": "3 months",
+                    "dosage_value": 10,
+                    "dosage_unit": "mg",
+                    "frequency_per_day": 1,
+                    "is_as_needed": false,
+                    "confidence": 0.85,
+                    "date": "2026-07-21",
+                    "source_file": "10_21-07-2026_dyslipidaemia.png",
+                    "prescription_group": "rx-0"
+                },
+                {
+                    "name": "Levothyroxine sodium",
+                    "ingredients": [
+                        "Levothyroxine"
+                    ],
+                    "dosage": "1 tablet before breakfast — CONTINUE",
+                    "frequency": "once daily (before breakfast)",
+                    "duration": "3 months",
+                    "dosage_value": 75,
+                    "dosage_unit": "mcg",
+                    "frequency_per_day": 1,
+                    "is_as_needed": false,
+                    "confidence": 0.85,
+                    "date": "2026-07-21",
+                    "source_file": "10_21-07-2026_dyslipidaemia.png",
+                    "prescription_group": "rx-0"
+                },
+                {
+                    "name": "Cholecalciferol (Vitamin D3)",
+                    "ingredients": [
+                        "Cholecalciferol"
+                    ],
+                    "dosage": "1 capsule once daily — maintenance dose",
+                    "frequency": "once daily",
+                    "duration": "3 months",
+                    "dosage_value": 1000,
+                    "dosage_unit": "IU",
+                    "frequency_per_day": 1,
+                    "is_as_needed": false,
+                    "confidence": 0.85,
+                    "date": "2026-07-21",
+                    "source_file": "10_21-07-2026_dyslipidaemia.png",
+                    "prescription_group": "rx-0"
+                },
+                {
+                    "name": "Calcium carbonate + Vitamin D3",
+                    "ingredients": [
+                        "Calcium carbonate",
+                        "Cholecalciferol"
+                    ],
+                    "dosage": "1 tablet twice daily after meals",
+                    "frequency": "twice daily",
+                    "duration": "3 months",
+                    "dosage_value": 500,
+                    "dosage_unit": "mg",
+                    "frequency_per_day": 2,
+                    "is_as_needed": false,
+                    "confidence": 0.8,
+                    "date": "2026-07-21",
+                    "source_file": "10_21-07-2026_dyslipidaemia.png",
+                    "prescription_group": "rx-0"
+                }
+            ],
+            "lab_results_timeline": [],
+            "known_allergies": []
+        },
+        "cross_check_report": {
+            "potential_drug_interactions": [],
+            "duplicate_prescriptions": [],
+            "conflicting_dosage_instructions": [],
+            "allergy_conflicts": [],
+            "overall_recommendation": "All listed medications come from the same prescription group and no drug interactions, duplicate prescriptions, dosage conflicts, or allergy matches were flagged by this structured check. This analysis is not a substitute for a pharmacist or a licensed drug‑interaction checking tool—please consult your prescribing clinician or pharmacist before making any changes to your medications.",
+            "evidence_summary": {
+                "total_findings": 0,
+                "deterministic": 0,
+                "reference_graph": 0,
+                "model_knowledge": 0,
+                "model_knowledge_confidence_ceiling": 0.6,
+                "note": "No safety findings were reported, so there is nothing to grade."
+            },
+            "timing_summary": {
+                "concurrent": 0,
+                "possible": 0,
+                "not_concurrent": 0,
+                "unknown": 0,
+                "note": "No findings to place in time."
+            },
+            "concurrent_exposure": []
+        },
+        "lab_trends": {
+            "trends": [],
+            "insufficient_data": [],
+            "note": "This is worked out directly from the numbers printed on the uploaded lab reports and the normal ranges printed alongside them. It shows how results have changed over time — it does not say what caused a change, and it is not a diagnosis. It also cannot see anything your reports don't show, such as how you are feeling or any other health condition. A doctor or pharmacist can explain what these results mean for you."
+        },
+        "consult_triage": {
+            "consult_needed": true,
+            "consult_type": "pharmacist",
+            "urgency": "routine",
+            "urgency_meaning": "raise it at the next scheduled appointment",
+            "confidence": 0.85,
+            "recommended_specialties": [],
+            "pharmacist_actions": [
+                {
+                    "trigger": "low_extraction_confidence",
+                    "subject": "10_21-07-2026_dyslipidaemia.png",
+                    "detail": "10_21-07-2026_dyslipidaemia.png: these fields could not be read reliably: dosage_value/dosage_unit for 'Calcium carbonate + Vitamin D3' reduced to 500 mg (document shows '500 mg / 250 IU' combination; single numeric dosage_value chosen for the mass component), quantity fields were read from printed table but not repeated individually in this extraction (visible on document). Any medication or result taken from this document should be confirmed against the original.",
+                    "route": "pharmacist",
+                    "urgency": "routine",
+                    "why_this_route": "Parts of this document could not be read reliably, so the medication list built from it may be wrong. A pharmacist can check the extracted list against the actual dispensing record — this is a data-quality check, not a clinical finding.",
+                    "confidence": 0.85
+                }
+            ],
+            "doctor_actions": [],
+            "referral_items": [
+                {
+                    "trigger": "low_extraction_confidence",
+                    "subject": "10_21-07-2026_dyslipidaemia.png",
+                    "detail": "10_21-07-2026_dyslipidaemia.png: these fields could not be read reliably: dosage_value/dosage_unit for 'Calcium carbonate + Vitamin D3' reduced to 500 mg (document shows '500 mg / 250 IU' combination; single numeric dosage_value chosen for the mass component), quantity fields were read from printed table but not repeated individually in this extraction (visible on document). Any medication or result taken from this document should be confirmed against the original.",
+                    "route": "pharmacist",
+                    "urgency": "routine",
+                    "why_this_route": "Parts of this document could not be read reliably, so the medication list built from it may be wrong. A pharmacist can check the extracted list against the actual dispensing record — this is a data-quality check, not a clinical finding.",
+                    "confidence": 0.85
+                }
+            ],
+            "summary": "A pharmacist should be consulted — raise it at the next scheduled appointment. 1 finding(s) relate to how the medications on file fit together, which a pharmacist can resolve directly, without an appointment. Nothing found here requires a prescribing or diagnostic decision, so a doctor's appointment is not indicated by these checks alone.",
+            "emergency_advice": "This routing is based on uploaded documents, which describe the past. It cannot see how the patient is right now. Anyone with severe or sudden symptoms — trouble breathing, chest pain, swelling of the face or throat, a spreading rash, fainting, or confusion — should seek emergency care immediately rather than follow anything suggested here.",
+            "note": "This is an automated routing suggestion derived from the extracted documents, not a diagnosis or a triage decision. It says who is likely the right person to ask, not what is wrong. A licensed clinician decides what any finding actually means. Where no trigger was found, that means only that these specific automated checks found nothing — it is not a clean bill of health and is never a reason to skip or delay care."
+        },
+        "translation_risk": {
+            "flag": "none",
+            "counts": {
+                "high": 0,
+                "review": 0
+            },
+            "flagged_documents": [],
+            "message": null
+        },
+        "antidote_reference_notes": [],
+        "duplicate_files_skipped": [],
+        "indexed": true
+    }
+}
