@@ -10,6 +10,9 @@ interface LabTrendsCardProps {
   labResults: Array<Record<string, unknown>>;
   trends?: LabTrend[];
   singleResults?: SingleLabResult[];
+  /** Overall explanation of how the trends/statuses were worked out — one
+   * note for the whole section, not per test. From `lab_trends.note`. */
+  note?: string;
 }
 
 type Status = "low" | "normal" | "high" | "unknown";
@@ -72,6 +75,7 @@ export function LabTrendsCard({
   labResults,
   trends = [],
   singleResults = [],
+  note,
 }: LabTrendsCardProps) {
   const [showAll, setShowAll] = useState(false);
 
@@ -288,6 +292,12 @@ export function LabTrendsCard({
           </div>
         )}
       </div>
+
+      {note && blocks.length > 0 && (
+        <p className="flex-shrink-0 border-t border-slate-200 bg-slate-50 px-4 py-2 text-[11px] text-slate-500">
+          {note}
+        </p>
+      )}
     </div>
   );
 }

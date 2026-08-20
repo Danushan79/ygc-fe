@@ -29,6 +29,8 @@ export async function sendJson<T>(url: string, method: string, body?: unknown): 
     payload = null;
   }
 
+  console.log(`[api] ${method} ${url} -> ${response.status}\n${JSON.stringify(payload, null, 2)}`);
+
   if (!response.ok || !payload || !payload.success) {
     const message =
       payload && !payload.success ? payload.error : "Something went wrong. Please try again.";
@@ -52,6 +54,8 @@ export async function sendFormData<T>(url: string, formData: FormData): Promise<
   } catch {
     payload = null;
   }
+
+  console.log(`[api] POST ${url} -> ${response.status}\n${JSON.stringify(payload, null, 2)}`);
 
   if (!response.ok || !payload || !payload.success) {
     const message =

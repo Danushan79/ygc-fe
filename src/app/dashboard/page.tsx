@@ -22,7 +22,7 @@ export default async function DashboardPage() {
           <h2 className="text-2xl leading-tight font-bold text-slate-900">
             Welcome, <span className="text-blue-800">{user?.fullName ?? "there"}</span>
           </h2>
-          <p className="mt-1 text-sm text-slate-500">Here&apos;s your health timeline overview.</p>
+          <p className="mt-1 text-sm text-slate-500">Stay informed about your health and medications.</p>
         </div>
 
         <UploadDocumentButton />

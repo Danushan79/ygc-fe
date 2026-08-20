@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DoctorRecommendationCard } from "@/components/dashboard/doctor-recommendation-card";
 import { HealthTimelineCard } from "@/components/dashboard/health-timeline-card";
 import { LabTrendsCard } from "@/components/dashboard/lab-trends-card";
@@ -22,6 +22,10 @@ const TABS: { id: TabId; label: string }[] = [
 
 export function DashboardTabs({ documentsData }: DashboardTabsProps) {
   const [activeTab, setActiveTab] = useState<TabId>("overview");
+
+  useEffect(() => {
+    console.log("[dashboard] documentsData from backend:", documentsData);
+  }, [documentsData]);
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
@@ -60,6 +64,7 @@ export function DashboardTabs({ documentsData }: DashboardTabsProps) {
               labResults={documentsData?.timeline?.lab_results_timeline ?? []}
               trends={documentsData?.lab_trends?.trends ?? []}
               singleResults={documentsData?.lab_trends?.single_results ?? []}
+              note={documentsData?.lab_trends?.note}
             />
           </div>
         </div>
