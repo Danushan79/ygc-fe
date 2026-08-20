@@ -8,7 +8,7 @@ export default async function SafetyAlertsPage() {
   return (
     <ComingSoon
       icon={TriangleAlert}
-      title="Safety Alerts"
+      title="Drug Interaction & Conflict"
       description="A full view of drug interactions and allergy conflicts is coming soon."
     />
   );

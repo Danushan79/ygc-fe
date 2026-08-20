@@ -12,11 +12,12 @@ interface DashboardTabsProps {
   documentsData: UploadDocumentsResult | null;
 }
 
-type TabId = "overview" | "timeline";
+type TabId = "overview" | "timeline" | "recommendation";
 
 const TABS: { id: TabId; label: string }[] = [
   { id: "overview", label: "Overview" },
   { id: "timeline", label: "Health Timeline" },
+  { id: "recommendation", label: "Recommendation" },
 ];
 
 export function DashboardTabs({ documentsData }: DashboardTabsProps) {
@@ -47,25 +48,28 @@ export function DashboardTabs({ documentsData }: DashboardTabsProps) {
           <SummaryCards data={documentsData} />
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-            <LabTrendsCard
-              labResults={documentsData?.timeline?.lab_results_timeline ?? []}
-              trends={documentsData?.lab_trends?.trends ?? []}
-              singleResults={documentsData?.lab_trends?.single_results ?? []}
-            />
-
             <SafetyAlertsCard
               interactions={documentsData?.cross_check_report?.potential_drug_interactions ?? []}
               duplicates={documentsData?.cross_check_report?.duplicate_prescriptions ?? []}
               conflictingDosage={documentsData?.cross_check_report?.conflicting_dosage_instructions ?? []}
               allergyConflicts={documentsData?.cross_check_report?.allergy_conflicts ?? []}
+              visits={documentsData?.timeline?.visits ?? []}
+            />
+
+            <LabTrendsCard
+              labResults={documentsData?.timeline?.lab_results_timeline ?? []}
+              trends={documentsData?.lab_trends?.trends ?? []}
+              singleResults={documentsData?.lab_trends?.single_results ?? []}
             />
           </div>
-
-          <DoctorRecommendationCard consultTriage={documentsData?.consult_triage} />
         </div>
-      ) : (
+      ) : activeTab === "timeline" ? (
         <div className="flex min-h-0 flex-1 flex-col">
           <HealthTimelineCard visits={documentsData?.timeline?.visits ?? []} />
+        </div>
+      ) : (
+        <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto pr-1 pb-1">
+          <DoctorRecommendationCard consultTriage={documentsData?.consult_triage} />
         </div>
       )}
     </div>

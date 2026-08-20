@@ -1,16 +1,36 @@
 import { ArrowLeftRight, FileText, TriangleAlert } from "lucide-react";
 import type {
   CrossCheckIssue,
+  DocumentVisit,
   DuplicatePrescription,
   PotentialDrugInteraction,
   SourceDocumentRef,
 } from "@/types/document";
+import { formatDisplayDate } from "@/utils/date";
 
 interface SafetyAlertsCardProps {
   interactions: PotentialDrugInteraction[];
   duplicates: DuplicatePrescription[];
   conflictingDosage: CrossCheckIssue[];
   allergyConflicts: CrossCheckIssue[];
+  visits: DocumentVisit[];
+}
+
+/** Same key `dedupeDocuments` groups on below, so a finding's document
+ * reference resolves to the exact upload it came from rather than any
+ * document that happens to share a filename. */
+function documentRefKey(date: string | undefined, sourceFile: string): string {
+  return `${date ?? ""}__${sourceFile}`;
+}
+
+function buildDocumentUrlLookup(visits: DocumentVisit[]): Map<string, string> {
+  const lookup = new Map<string, string>();
+  for (const visit of visits) {
+    const sourceFile = visit._source?.file;
+    if (!sourceFile || !visit.document_url) continue;
+    lookup.set(documentRefKey(visit.date, sourceFile), visit.document_url);
+  }
+  return lookup;
 }
 
 function describeIssue(issue: CrossCheckIssue): string {
@@ -68,7 +88,9 @@ export function SafetyAlertsCard({
   duplicates,
   conflictingDosage,
   allergyConflicts,
+  visits,
 }: SafetyAlertsCardProps) {
+  const documentUrls = buildDocumentUrlLookup(visits);
   const alerts: Alert[] = [
     ...interactions.map((interaction, index) => ({
       key: `interaction-${index}`,
@@ -120,7 +142,7 @@ export function SafetyAlertsCard({
       <div className="flex items-center justify-between rounded-t-lg border-b border-slate-200 bg-red-50 p-2.5">
         <h3 className="flex items-center gap-1.5 text-sm font-semibold text-slate-900">
           <TriangleAlert className="h-4.5 w-4.5 text-red-600" strokeWidth={2} />
-          Safety Alerts
+          Drug Interaction & Conflict
         </h3>
         <span className="rounded-full bg-red-600 px-1.5 py-0.5 text-[10px] font-bold text-white">
           {alerts.length}
@@ -139,21 +161,47 @@ export function SafetyAlertsCard({
                     Source document unclear
                   </span>
                 ) : (
-                  group.documents.map((doc, docIdx) => (
-                    <span key={docIdx} className="inline-flex items-center gap-1">
-                      {docIdx > 0 && (
-                        <ArrowLeftRight className="h-3 w-3 shrink-0 text-slate-400" strokeWidth={2} />
-                      )}
-                      <span
-                        title={doc.date ? `${doc.source_file} · ${doc.date}` : doc.source_file}
-                        className="inline-flex max-w-[160px] items-center gap-1 rounded-full border border-slate-300 bg-white px-1.5 py-0.5 text-[10px] font-medium text-slate-700 shadow-sm"
-                      >
+                  group.documents.map((doc, docIdx) => {
+                    const displayDate = formatDisplayDate(doc.date);
+                    const url = doc.source_file
+                      ? documentUrls.get(documentRefKey(doc.date, doc.source_file))
+                      : undefined;
+                    const chipClassName =
+                      "inline-flex max-w-[160px] items-center gap-1 rounded-full border border-slate-300 bg-white px-1.5 py-0.5 text-[10px] font-medium text-slate-700 shadow-sm";
+                    const chipContent = (
+                      <>
                         <FileText className="h-3 w-3 shrink-0 text-slate-500" strokeWidth={2} />
                         <span className="truncate">{doc.source_file}</span>
-                        {doc.date && <span className="shrink-0 text-slate-400">· {doc.date}</span>}
+                        {displayDate && <span className="shrink-0 text-slate-400">· {displayDate}</span>}
+                      </>
+                    );
+
+                    return (
+                      <span key={docIdx} className="inline-flex items-center gap-1">
+                        {docIdx > 0 && (
+                          <ArrowLeftRight className="h-3 w-3 shrink-0 text-slate-400" strokeWidth={2} />
+                        )}
+                        {url ? (
+                          <a
+                            href={url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={displayDate ? `${doc.source_file} · ${displayDate}` : doc.source_file}
+                            className={`${chipClassName} hover:border-blue-400 hover:text-blue-800`}
+                          >
+                            {chipContent}
+                          </a>
+                        ) : (
+                          <span
+                            title={displayDate ? `${doc.source_file} · ${displayDate}` : doc.source_file}
+                            className={chipClassName}
+                          >
+                            {chipContent}
+                          </span>
+                        )}
                       </span>
-                    </span>
-                  ))
+                    );
+                  })
                 )}
               </div>
 

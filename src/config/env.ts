@@ -13,6 +13,7 @@ export const env = {
   cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
   cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET,
   documentsApiBaseUrl: process.env.DOCUMENTS_API_BASE_URL ?? "http://127.0.0.1:8000",
+  googlePlacesApiKey: process.env.GOOGLE_PLACES_API_KEY,
 } as const;
 
 export const isProduction = env.nodeEnv === "production";

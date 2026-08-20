@@ -1,4 +1,8 @@
+"use client";
+
 import { CircleCheck, FileWarning, Pill, Search, Stethoscope, UserRound } from "lucide-react";
+import { useState } from "react";
+import { FindDoctorModal } from "@/components/dashboard/find-doctor-modal";
 import type { ConsultAction, ConsultTriage } from "@/types/document";
 
 interface DoctorRecommendationCardProps {
@@ -56,6 +60,7 @@ function DocumentQualityNotice({
 }
 
 export function DoctorRecommendationCard({ consultTriage }: DoctorRecommendationCardProps) {
+  const [isFindDoctorOpen, setIsFindDoctorOpen] = useState(false);
   const qualityNotices = consultTriage?.document_quality_notices ?? [];
 
   if (!consultTriage || !consultTriage.consult_needed) {
@@ -124,6 +129,7 @@ export function DoctorRecommendationCard({ consultTriage }: DoctorRecommendation
 
           <button
             type="button"
+            onClick={() => setIsFindDoctorOpen(true)}
             className="flex items-center gap-1.5 rounded-md border border-blue-700 bg-blue-700 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-blue-800"
           >
             <Search className="h-3.5 w-3.5" strokeWidth={2} />
@@ -182,6 +188,14 @@ export function DoctorRecommendationCard({ consultTriage }: DoctorRecommendation
           {emergency_advice}
         </p>
       </div>
+
+      <FindDoctorModal
+        open={isFindDoctorOpen}
+        onClose={() => setIsFindDoctorOpen(false)}
+        consultType={consult_type}
+        typeLabel={typeLabel}
+        specialties={recommended_specialties}
+      />
     </div>
   );
 }

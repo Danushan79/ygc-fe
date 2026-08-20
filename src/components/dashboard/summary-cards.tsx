@@ -1,4 +1,4 @@
-import { ArrowRight, BadgeCheck, Pill, TrendingUp, TriangleAlert } from "lucide-react";
+import { ArrowRight, BadgeCheck, ShieldAlert, TriangleAlert } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { CrossCheckIssue, UploadDocumentsResult } from "@/types/document";
 import { isLabResultFlagged } from "@/utils/lab-result";
@@ -31,13 +31,9 @@ export function SummaryCards({ data }: SummaryCardsProps) {
   const crossCheck = data?.cross_check_report;
   const timeline = data?.timeline;
 
-  const safetyAlertsCount =
-    (crossCheck?.potential_drug_interactions.length ?? 0) +
-    (crossCheck?.duplicate_prescriptions.length ?? 0) +
-    (crossCheck?.conflicting_dosage_instructions.length ?? 0) +
-    (crossCheck?.allergy_conflicts.length ?? 0);
+  const drugInteractionCount = crossCheck?.potential_drug_interactions.length ?? 0;
 
-  const medCheckCount = crossCheck?.potential_drug_interactions.length ?? 0;
+  const drugConflictCount = crossCheck?.conflicting_dosage_instructions.length ?? 0;
 
   const labTrendCount = (timeline?.lab_results_timeline ?? []).filter(isLabResultFlagged).length;
 
@@ -83,9 +79,9 @@ export function SummaryCards({ data }: SummaryCardsProps) {
       valueSizeClassName: "text-3xl",
     },
     {
-      title: "Safety Alerts",
-      linkLabel: safetyAlertsCount > 0 ? "Review needed" : "All clear",
-      value: String(safetyAlertsCount),
+      title: "Drug Interaction",
+      linkLabel: drugInteractionCount > 0 ? "Review needed" : "No interactions",
+      value: String(drugInteractionCount),
       icon: TriangleAlert,
       cardClassName: "bg-red-50 border-red-200",
       iconWrapClassName: "bg-red-100 text-red-600",
@@ -95,10 +91,10 @@ export function SummaryCards({ data }: SummaryCardsProps) {
       valueSizeClassName: "text-xl",
     },
     {
-      title: "Med Check",
-      linkLabel: medCheckCount > 0 ? "Interaction found" : "No interactions",
-      value: String(medCheckCount),
-      icon: Pill,
+      title: "Drug Conflict",
+      linkLabel: drugConflictCount > 0 ? "Review needed" : "No conflicts",
+      value: String(drugConflictCount),
+      icon: ShieldAlert,
       cardClassName: "bg-yellow-50 border-yellow-200",
       iconWrapClassName: "bg-yellow-100 text-yellow-700",
       titleClassName: "text-yellow-900",

@@ -27,6 +27,10 @@ export interface DocumentVisit {
   _source: { file: string; method: string };
   document_url: string;
   cloudinary_public_id: string;
+  /** When this file was uploaded to the system (ISO 8601, UTC) — distinct
+   * from `date`, which is the date printed on the document itself. Absent
+   * on documents saved before this field existed. */
+  uploaded_at?: string;
 }
 
 /** A document a finding traces back to — the prescription's own date plus
