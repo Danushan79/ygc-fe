@@ -19,8 +19,11 @@ export default async function DashboardPage() {
     <div className="flex h-full flex-col">
       <div className="mb-4 flex flex-shrink-0 items-stretch justify-between">
         <div>
-          <h2 className="text-2xl leading-tight font-bold text-slate-900">
-            Welcome, <span className="text-blue-800">{user?.fullName ?? "there"}</span>
+          <h2 className="text-2xl leading-tight font-bold tracking-tight text-slate-900">
+            Welcome,{" "}
+            <span className="bg-gradient-to-br from-blue-700 to-indigo-700 bg-clip-text text-transparent">
+              {user?.fullName ?? "there"}
+            </span>
           </h2>
           <p className="mt-1 text-sm text-slate-500">Stay informed about your health and medications.</p>
         </div>

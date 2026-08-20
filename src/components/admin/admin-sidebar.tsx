@@ -13,9 +13,11 @@ export function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="flex w-60 flex-shrink-0 flex-col border-r border-slate-200 bg-slate-50">
+    <aside className="flex w-60 flex-shrink-0 flex-col border-r border-slate-200/80 bg-white">
       <div className="px-6 py-6">
-        <p className="text-2xl font-extrabold text-blue-800">CliniCore</p>
+        <p className="bg-gradient-to-br from-blue-800 to-indigo-700 bg-clip-text text-2xl font-extrabold tracking-tight text-transparent">
+          CliniCore
+        </p>
         <p className="mt-1 text-sm text-slate-500">Admin Portal</p>
       </div>
 
@@ -27,10 +29,10 @@ export function AdminSidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 rounded-md border-l-4 px-3 py-2.5 text-sm font-medium transition-colors ${
+              className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all ${
                 isActive
-                  ? "border-blue-700 bg-blue-50 text-blue-800"
-                  : "border-transparent text-slate-600 hover:bg-slate-100"
+                  ? "bg-gradient-to-r from-blue-50 to-blue-50/40 text-blue-800 shadow-sm ring-1 ring-blue-900/5"
+                  : "text-slate-600 hover:bg-slate-50"
               }`}
             >
               <item.icon className="h-5 w-5" strokeWidth={2} />

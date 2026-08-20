@@ -41,7 +41,7 @@ export function DashboardTabs({ documentsData }: DashboardTabsProps) {
           >
             {tab.label}
             {activeTab === tab.id && (
-              <span className="absolute right-0 bottom-0 left-0 h-0.5 rounded-full bg-blue-800" />
+              <span className="absolute right-0 bottom-0 left-0 h-0.5 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600" />
             )}
           </button>
         ))}

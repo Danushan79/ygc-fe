@@ -164,8 +164,8 @@ export function LabTrendsCard({
   const visible = showAll ? blocks : alwaysShown;
 
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
-      <div className="flex flex-shrink-0 items-center justify-between border-b border-slate-200 bg-slate-50 px-4 py-2.5">
+    <div className="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm ring-1 ring-slate-900/[0.02]">
+      <div className="flex flex-shrink-0 items-center justify-between border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white px-4 py-2.5">
         <h3 className="text-sm font-semibold text-slate-900">Lab Results</h3>
         {blocks.length > 0 && (
           <span
@@ -193,7 +193,7 @@ export function LabTrendsCard({
               return (
                 <div
                   key={block.key}
-                  className={`rounded-md border p-3 ${
+                  className={`rounded-lg border p-3 transition-shadow hover:shadow-sm ${
                     abnormal ? "border-red-200 bg-red-50" : "border-slate-200 bg-white"
                   }`}
                 >

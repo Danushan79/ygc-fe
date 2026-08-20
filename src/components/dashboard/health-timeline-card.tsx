@@ -40,14 +40,14 @@ export function HealthTimelineCard({ visits }: HealthTimelineCardProps) {
   const sortedVisits = [...filteredVisits].sort((a, b) => toSortableTime(b.date) - toSortableTime(a.date));
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col rounded-lg border border-slate-200 bg-white shadow-sm">
-      <div className="flex flex-shrink-0 items-center justify-between border-b border-slate-200 bg-slate-50 p-3">
+    <div className="flex min-h-0 flex-1 flex-col rounded-xl border border-slate-200/80 bg-white shadow-sm ring-1 ring-slate-900/[0.02]">
+      <div className="flex flex-shrink-0 items-center justify-between border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white p-3">
         <h3 className="text-base font-semibold text-slate-900">Your Health Timeline</h3>
         <div ref={filterRef} className="relative">
           <button
             type="button"
             onClick={() => setIsFilterOpen((open) => !open)}
-            className={`flex items-center gap-1 rounded border px-2 py-1 text-xs transition-colors ${
+            className={`flex items-center gap-1 rounded-lg border px-2 py-1 text-xs transition-colors ${
               selectedTypes.length > 0
                 ? "border-blue-800 bg-blue-50 text-blue-800"
                 : "border-slate-200 text-slate-700 hover:bg-slate-100"
@@ -63,7 +63,7 @@ export function HealthTimelineCard({ visits }: HealthTimelineCardProps) {
           </button>
 
           {isFilterOpen && (
-            <div className="absolute top-full right-0 z-20 mt-1 w-56 rounded-lg border border-slate-200 bg-white p-2 shadow-lg">
+            <div className="absolute top-full right-0 z-20 mt-1 w-56 rounded-xl border border-slate-200/80 bg-white p-2 shadow-xl ring-1 ring-slate-900/[0.03]">
               {documentTypes.length === 0 ? (
                 <p className="p-2 text-xs text-slate-500">No document types yet.</p>
               ) : (
@@ -119,11 +119,11 @@ export function HealthTimelineCard({ visits }: HealthTimelineCardProps) {
                 const Icon = iconForDocumentType(visit.document_type);
                 return (
                   <div key={`${visit.cloudinary_public_id}-${index}`} className="relative pl-8">
-                    <div className="absolute top-0 -left-0.5 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-blue-800 text-white ring-4 ring-white">
+                    <div className="absolute top-0 -left-0.5 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-blue-700 to-indigo-700 text-white shadow-sm ring-4 ring-white">
                       <Icon className="h-3.5 w-3.5" strokeWidth={2} />
                     </div>
 
-                    <div className="rounded-lg border border-slate-200 bg-white p-3 shadow-sm">
+                    <div className="rounded-xl border border-slate-200/80 bg-white p-3 shadow-sm transition-shadow hover:shadow-md">
                       <div className="mb-2 flex items-start justify-between">
                         <div>
                           <h4 className="text-sm font-semibold text-blue-800">{visit.date}</h4>

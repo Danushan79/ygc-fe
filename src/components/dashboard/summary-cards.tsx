@@ -109,7 +109,7 @@ export function SummaryCards({ data }: SummaryCardsProps) {
       {summaryCards.map((card) => (
         <div
           key={card.title}
-          className={`flex items-center justify-between gap-3 rounded-lg border p-3 ${card.cardClassName}`}
+          className={`flex items-center justify-between gap-3 rounded-xl border p-3 shadow-sm transition-shadow hover:shadow-md ${card.cardClassName}`}
         >
           <div className="flex items-center gap-3">
             <div className={`rounded-full p-2 ${card.iconWrapClassName}`}>

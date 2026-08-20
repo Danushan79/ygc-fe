@@ -55,12 +55,12 @@ function StatTile({
   tone?: Tone;
 }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+    <div className="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm ring-1 ring-slate-900/[0.02] transition-shadow hover:shadow-md">
       <div className="flex items-center gap-2 text-sm text-slate-500">
         <Icon className="h-4 w-4" style={{ color: toneColor(tone) }} strokeWidth={2} />
         {label}
       </div>
-      <p className="mt-2 text-2xl font-semibold text-slate-900">{value}</p>
+      <p className="mt-2 text-2xl font-semibold tracking-tight text-slate-900">{value}</p>
       {subtext && <p className="mt-1 text-xs text-slate-500">{subtext}</p>}
     </div>
   );
@@ -78,13 +78,13 @@ function ChartCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+    <div className="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm ring-1 ring-slate-900/[0.02]">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-slate-900">{title}</h3>
         <button
           type="button"
           onClick={onToggle}
-          className="text-xs font-medium text-blue-700 hover:underline"
+          className="rounded-md px-2 py-1 text-xs font-medium text-blue-700 transition-colors hover:bg-blue-50"
         >
           {isTableView ? "Show chart" : "Show table"}
         </button>
@@ -248,7 +248,7 @@ function FlagBadge({ count, tone }: { count: number; tone: "critical" | "warning
 
 function SafetyAlertsTable({ alerts }: { alerts: AdminDashboardSafetyAlert[] }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div className="rounded-2xl border border-slate-200/80 bg-white shadow-sm ring-1 ring-slate-900/[0.02]">
       <div className="border-b border-slate-200 p-4">
         <h3 className="text-sm font-semibold text-slate-900">Patients with cross-check flags</h3>
         <p className="mt-0.5 text-xs text-slate-500">
@@ -276,7 +276,7 @@ function SafetyAlertsTable({ alerts }: { alerts: AdminDashboardSafetyAlert[] }) 
               </tr>
             ) : (
               alerts.map((alert) => (
-                <tr key={alert.userId} className="text-slate-700">
+                <tr key={alert.userId} className="text-slate-700 transition-colors hover:bg-slate-50">
                   <td className="px-4 py-3">
                     <div className="font-medium text-slate-900">{alert.fullName}</div>
                     <div className="text-xs text-slate-500">{alert.email}</div>

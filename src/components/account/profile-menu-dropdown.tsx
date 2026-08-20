@@ -4,6 +4,7 @@ import { CircleUserRound, LogOut, UserCog } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { ApiRequestError, signOutRequest } from "@/lib/api/auth-client";
 import type { AuthUserDto } from "@/types/auth";
 
@@ -37,12 +38,12 @@ export function ProfileMenuDropdown({
     }
   }
 
-  return (
+  const menu = (
     <div
       role="menu"
-      className="absolute top-full right-0 z-50 mt-2 w-64 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg"
+      className="absolute top-full right-0 z-50 mt-2 w-64 overflow-hidden rounded-2xl border border-slate-200/70 bg-white shadow-xl shadow-slate-900/10 ring-1 ring-slate-900/[0.03]"
     >
-      <div className="flex items-center gap-3 border-b border-slate-200 p-4">
+      <div className="flex items-center gap-3 border-b border-slate-200 bg-gradient-to-br from-slate-50 to-white p-4">
         <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center overflow-hidden rounded-full border border-slate-200 bg-slate-100 text-slate-500">
           {user.avatarUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -82,8 +83,11 @@ export function ProfileMenuDropdown({
           Sign Out
         </button>
       </div>
+    </div>
+  );
 
-      {showSignOutConfirm && (
+  const signOutConfirm = showSignOutConfirm
+    ? createPortal(
         <div
           role="presentation"
           className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4"
@@ -94,7 +98,7 @@ export function ProfileMenuDropdown({
             aria-modal="true"
             aria-labelledby="signout-confirm-title"
             onClick={(event) => event.stopPropagation()}
-            className="w-full max-w-sm overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg"
+            className="w-full max-w-sm overflow-hidden rounded-2xl border border-slate-200/70 bg-white shadow-2xl ring-1 ring-slate-900/[0.03]"
           >
             <div className="p-5">
               <div className="flex items-start gap-3">
@@ -129,14 +133,21 @@ export function ProfileMenuDropdown({
                 type="button"
                 disabled={isSigningOut}
                 onClick={handleSignOut}
-                className="flex items-center gap-2 rounded-lg bg-red-600 px-6 py-2 text-sm font-semibold text-white transition-colors hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+                className="flex items-center gap-2 rounded-lg bg-gradient-to-b from-red-600 to-red-700 px-6 py-2 text-sm font-semibold text-white shadow-sm shadow-red-900/20 transition-all hover:brightness-105 active:brightness-95 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isSigningOut ? "Signing out..." : "Sign Out"}
               </button>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        </div>,
+        document.body,
+      )
+    : null;
+
+  return (
+    <>
+      {menu}
+      {signOutConfirm}
+    </>
   );
 }

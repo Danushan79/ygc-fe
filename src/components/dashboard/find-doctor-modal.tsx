@@ -646,7 +646,7 @@ export function FindDoctorModal({ open, onClose, consultType, typeLabel, special
                         type="button"
                         onClick={handleSearchWider}
                         disabled={isSearching}
-                        className="flex items-center gap-1.5 rounded-lg bg-blue-700 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="flex items-center gap-1.5 rounded-lg bg-gradient-to-b from-blue-700 to-blue-800 px-4 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:brightness-105 active:brightness-95 disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         {isSearching ? (
                           <Loader2 className="h-3.5 w-3.5 animate-spin" strokeWidth={2} />
@@ -669,7 +669,7 @@ export function FindDoctorModal({ open, onClose, consultType, typeLabel, special
               ) : (
                 <ul className="space-y-2.5">
                   {results?.map((result) => (
-                    <li key={result.id} className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                    <li key={result.id} className="rounded-xl border border-slate-200 bg-slate-50 p-3 transition-shadow hover:shadow-sm">
                       <div className="flex items-start justify-between gap-2">
                         <div className="min-w-0">
                           <p className="truncate text-sm font-semibold text-slate-900">{result.name}</p>
@@ -729,7 +729,7 @@ export function FindDoctorModal({ open, onClose, consultType, typeLabel, special
               type="button"
               onClick={handleSearch}
               disabled={!canSearch || isSearching}
-              className="flex items-center gap-2 rounded-lg bg-blue-700 px-6 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex items-center gap-2 rounded-lg bg-gradient-to-b from-blue-700 to-blue-800 px-6 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:brightness-105 active:brightness-95 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isSearching ? (
                 <>

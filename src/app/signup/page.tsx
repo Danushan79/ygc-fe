@@ -181,7 +181,7 @@ export default function SignUpPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-700 py-3 font-bold text-white transition-colors hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-70"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-blue-700 to-blue-800 py-3 font-bold text-white shadow-md shadow-blue-900/20 transition-all hover:shadow-lg hover:shadow-blue-900/25 hover:brightness-105 active:brightness-95 disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:shadow-md disabled:hover:brightness-100"
             >
               {isSubmitting ? (
                 <>

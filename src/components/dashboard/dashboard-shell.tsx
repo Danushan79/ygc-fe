@@ -9,11 +9,11 @@ export function DashboardShell({ user, children }: { user: AuthUserDto; children
     <div className="flex flex-1">
       <DashboardSidebar />
       <div className="flex flex-1 flex-col">
-        <header className="flex h-14 flex-shrink-0 items-center justify-end gap-4 border-b border-slate-200 bg-white px-4">
+        <header className="flex h-14 flex-shrink-0 items-center justify-end gap-4 border-b border-slate-200/80 bg-white px-4">
           <ProfileMenuButton user={user} profileHref="/dashboard/profile" />
         </header>
 
-        <main className="flex-1 overflow-y-auto bg-slate-50 p-4">{children}</main>
+        <main className="flex-1 overflow-y-auto bg-[#f4f6fb] p-4">{children}</main>
       </div>
 
       <AiAssistantWidget />

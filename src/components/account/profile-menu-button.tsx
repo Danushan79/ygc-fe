@@ -48,7 +48,7 @@ export function ProfileMenuButton({
         aria-label="Open account menu"
         aria-haspopup="menu"
         aria-expanded={open}
-        className="flex h-8 w-8 flex-shrink-0 items-center justify-center overflow-hidden rounded-full border border-slate-200 bg-slate-100 text-slate-500 transition-colors hover:border-blue-300"
+        className="flex h-8 w-8 flex-shrink-0 items-center justify-center overflow-hidden rounded-full border border-slate-200 bg-slate-100 text-slate-500 transition-all hover:border-blue-300 hover:ring-2 hover:ring-blue-100"
       >
         {user.avatarUrl ? (
           // eslint-disable-next-line @next/next/no-img-element

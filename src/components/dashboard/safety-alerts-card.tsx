@@ -1,4 +1,4 @@
-import { ArrowLeftRight, FileText, TriangleAlert } from "lucide-react";
+import { ArrowLeftRight, FileText, ShieldCheck, TriangleAlert } from "lucide-react";
 import type {
   CrossCheckIssue,
   DocumentVisit,
@@ -78,10 +78,11 @@ interface AlertGroup {
 }
 
 const SEVERITY_STYLES: Record<string, string> = {
-  high: "border-red-300 bg-red-100",
-  moderate: "border-red-200 bg-red-50",
-  low: "border-orange-200 bg-orange-50",
+  high: "border-l-red-500 bg-red-50/60",
+  moderate: "border-l-red-400 bg-red-50/40",
+  low: "border-l-orange-400 bg-orange-50/40",
 };
+const DEFAULT_SEVERITY_STYLE = "border-l-red-300 bg-red-50/30";
 
 export function SafetyAlertsCard({
   interactions,
@@ -138,24 +139,29 @@ export function SafetyAlertsCard({
   }
 
   return (
-    <div className="flex-shrink-0 rounded-lg border border-slate-200 bg-white shadow-sm">
-      <div className="flex items-center justify-between rounded-t-lg border-b border-slate-200 bg-red-50 p-2.5">
-        <h3 className="flex items-center gap-1.5 text-sm font-semibold text-slate-900">
-          <TriangleAlert className="h-4.5 w-4.5 text-red-600" strokeWidth={2} />
+    <div className="flex-shrink-0 rounded-2xl border border-slate-200/70 bg-white shadow-sm ring-1 ring-slate-900/[0.02]">
+      <div className="flex items-center justify-between gap-2 border-b border-slate-100 px-4 py-3.5">
+        <h3 className="flex items-center gap-2 text-sm font-semibold text-slate-900">
+          <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-red-50 text-red-600">
+            <TriangleAlert className="h-4 w-4" strokeWidth={2.25} />
+          </span>
           Drug Interaction & Conflict
         </h3>
-        <span className="rounded-full bg-red-600 px-1.5 py-0.5 text-[10px] font-bold text-white">
+        <span className="flex-shrink-0 rounded-full bg-red-50 px-2.5 py-1 text-xs font-semibold text-red-700">
           {alerts.length}
         </span>
       </div>
 
-      <div className="space-y-2.5 p-2.5">
+      <div className="space-y-3 p-4">
         {alerts.length === 0 ? (
-          <p className="p-1 text-xs text-slate-500">No safety alerts found.</p>
+          <div className="flex flex-col items-center justify-center gap-1.5 py-6 text-slate-400">
+            <ShieldCheck className="h-6 w-6" strokeWidth={1.5} />
+            <p className="text-xs">No safety alerts found.</p>
+          </div>
         ) : (
           groups.map((group, groupIdx) => (
-            <div key={groupIdx} className="overflow-hidden rounded-md border border-slate-200">
-              <div className="flex flex-wrap items-center gap-1 border-b border-slate-200 bg-slate-50 px-2 py-1.5">
+            <div key={groupIdx} className="overflow-hidden rounded-xl border border-slate-200/70 bg-white">
+              <div className="flex flex-wrap items-center gap-1.5 border-b border-slate-100 bg-slate-50/60 px-3 py-2">
                 {group.documents.length === 0 ? (
                   <span className="text-[10px] font-medium tracking-wide text-slate-400 uppercase">
                     Source document unclear
@@ -205,19 +211,19 @@ export function SafetyAlertsCard({
                 )}
               </div>
 
-              <div className="space-y-2 bg-white p-2">
+              <div className="space-y-2 p-3">
                 {group.alerts.map((alert) => (
                   <div
                     key={alert.key}
-                    className={`rounded border p-2 ${
-                      (alert.severity && SEVERITY_STYLES[alert.severity]) ?? "border-red-200 bg-red-50"
+                    className={`rounded-lg border-l-4 p-2.5 shadow-sm shadow-slate-900/5 transition-shadow hover:shadow-md hover:shadow-slate-900/10 ${
+                      (alert.severity && SEVERITY_STYLES[alert.severity]) ?? DEFAULT_SEVERITY_STYLE
                     }`}
                   >
-                    <h4 className="mb-0.5 flex items-center gap-1 text-xs font-semibold text-red-700">
+                    <h4 className="mb-0.5 flex items-center gap-1.5 text-xs font-semibold text-red-700">
                       <TriangleAlert className="h-3.5 w-3.5" strokeWidth={2} />
                       {alert.title}
                     </h4>
-                    <p className="text-[11px] leading-tight text-slate-900">{alert.description}</p>
+                    <p className="text-[11px] leading-relaxed text-slate-600">{alert.description}</p>
                   </div>
                 ))}
               </div>

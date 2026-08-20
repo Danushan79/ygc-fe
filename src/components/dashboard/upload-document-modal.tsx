@@ -144,7 +144,7 @@ export function UploadDocumentModal({ open, onClose }: { open: boolean; onClose:
   return (
     <div
       role="presentation"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm"
       onClick={handleClose}
     >
       <div
@@ -152,7 +152,7 @@ export function UploadDocumentModal({ open, onClose }: { open: boolean; onClose:
         aria-modal="true"
         aria-labelledby="upload-modal-title"
         onClick={(event) => event.stopPropagation()}
-        className="w-full max-w-md overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg"
+        className="w-full max-w-md overflow-hidden rounded-2xl border border-slate-200/70 bg-white shadow-2xl ring-1 ring-black/5"
       >
         <div className="flex items-center justify-between border-b border-slate-200 p-4">
           <h3 id="upload-modal-title" className="text-base font-semibold text-slate-900">
@@ -185,7 +185,7 @@ export function UploadDocumentModal({ open, onClose }: { open: boolean; onClose:
 
           {review ? (
             <div className="space-y-3">
-              <div className="flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 p-3">
+              <div className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-3">
                 <AlertTriangle className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-600" strokeWidth={2} />
                 <p className="text-sm text-amber-900">{review.message}</p>
               </div>
@@ -194,7 +194,7 @@ export function UploadDocumentModal({ open, onClose }: { open: boolean; onClose:
                 {review.held_documents.map((doc, docIndex) => (
                   <li
                     key={`${doc.patient_name ?? "unknown"}-${docIndex}`}
-                    className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm"
+                    className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm"
                   >
                     <p className="font-medium text-slate-900">{doc.patient_name ?? "Unknown patient"}</p>
                     <p className="text-xs text-slate-500">{doc.source_files.join(", ")}</p>
@@ -225,7 +225,7 @@ export function UploadDocumentModal({ open, onClose }: { open: boolean; onClose:
                 onDragLeave={() => setIsDragActive(false)}
                 onDrop={isUploading ? undefined : handleDrop}
                 onClick={() => !isUploading && fileInputRef.current?.click()}
-                className={`flex cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border-2 border-dashed p-8 transition-colors ${
+                className={`flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed p-8 transition-colors ${
                   isDragActive
                     ? "border-blue-600 bg-blue-50"
                     : "border-slate-300 bg-slate-50 hover:bg-slate-100"
@@ -243,7 +243,7 @@ export function UploadDocumentModal({ open, onClose }: { open: boolean; onClose:
                     event.stopPropagation();
                     fileInputRef.current?.click();
                   }}
-                  className="rounded-lg bg-blue-700 px-4 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="rounded-lg bg-gradient-to-b from-blue-700 to-blue-800 px-4 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:brightness-105 active:brightness-95 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Browse Files
                 </button>
@@ -269,7 +269,7 @@ export function UploadDocumentModal({ open, onClose }: { open: boolean; onClose:
                   {files.map((file, index) => (
                     <li
                       key={`${file.name}-${index}`}
-                      className="flex items-center justify-between gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2"
+                      className="flex items-center justify-between gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2"
                     >
                       <div className="flex min-w-0 items-center gap-2">
                         <FileText className="h-4 w-4 flex-shrink-0 text-blue-700" strokeWidth={2} />
@@ -321,7 +321,7 @@ export function UploadDocumentModal({ open, onClose }: { open: boolean; onClose:
                 type="button"
                 disabled={isUploading || heldFiles.length === 0}
                 onClick={() => handleUpload(true, heldFiles)}
-                className="flex items-center gap-2 rounded-lg bg-amber-600 px-6 py-2 text-sm font-semibold text-white transition-colors hover:bg-amber-700 disabled:cursor-not-allowed disabled:opacity-50"
+                className="flex items-center gap-2 rounded-lg bg-gradient-to-b from-amber-600 to-amber-700 px-6 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:brightness-105 active:brightness-95 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isUploading && <Loader2 className="h-4 w-4 animate-spin" strokeWidth={2} />}
                 {isUploading ? "Uploading..." : "Add Anyway"}
@@ -341,7 +341,7 @@ export function UploadDocumentModal({ open, onClose }: { open: boolean; onClose:
                 type="button"
                 disabled={files.length === 0 || isUploading}
                 onClick={() => handleUpload(false)}
-                className="flex items-center gap-2 rounded-lg bg-blue-700 px-6 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-50"
+                className="flex items-center gap-2 rounded-lg bg-gradient-to-b from-blue-700 to-blue-800 px-6 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:brightness-105 active:brightness-95 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isUploading && <Loader2 className="h-4 w-4 animate-spin" strokeWidth={2} />}
                 {isUploading ? "Uploading..." : "Upload"}

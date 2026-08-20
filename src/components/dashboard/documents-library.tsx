@@ -71,7 +71,7 @@ export function DocumentsLibrary({ visits }: DocumentsLibraryProps) {
     <div className="flex h-full flex-col">
       <div className="mb-4 flex flex-shrink-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900">Documents</h2>
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900">Documents</h2>
           <p className="mt-1 text-sm text-slate-500">
             {visits.length} document{visits.length === 1 ? "" : "s"} uploaded so far.
           </p>
@@ -88,7 +88,7 @@ export function DocumentsLibrary({ visits }: DocumentsLibraryProps) {
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Search by type, provider, or date"
-              className="w-full rounded-lg border border-slate-300 bg-white py-2 pr-3 pl-9 text-sm text-slate-900 focus:border-transparent focus:ring-2 focus:ring-blue-600 focus:outline-none"
+              className="w-full rounded-xl border border-slate-300 bg-white py-2 pr-3 pl-9 text-sm text-slate-900 transition-shadow focus:border-transparent focus:ring-2 focus:ring-blue-600 focus:outline-none"
             />
           </div>
 
@@ -101,7 +101,7 @@ export function DocumentsLibrary({ visits }: DocumentsLibraryProps) {
                 onChange={(event) => setUploadedFrom(event.target.value)}
                 max={uploadedTo || undefined}
                 aria-label="Uploaded from date"
-                className="rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-sm text-slate-900 focus:border-transparent focus:ring-2 focus:ring-blue-600 focus:outline-none"
+                className="rounded-xl border border-slate-300 bg-white px-2 py-1.5 text-sm text-slate-900 transition-shadow focus:border-transparent focus:ring-2 focus:ring-blue-600 focus:outline-none"
               />
             </label>
             <span className="text-xs text-slate-400">to</span>
@@ -111,7 +111,7 @@ export function DocumentsLibrary({ visits }: DocumentsLibraryProps) {
               onChange={(event) => setUploadedTo(event.target.value)}
               min={uploadedFrom || undefined}
               aria-label="Uploaded to date"
-              className="rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-sm text-slate-900 focus:border-transparent focus:ring-2 focus:ring-blue-600 focus:outline-none"
+              className="rounded-xl border border-slate-300 bg-white px-2 py-1.5 text-sm text-slate-900 transition-shadow focus:border-transparent focus:ring-2 focus:ring-blue-600 focus:outline-none"
             />
             {hasUploadedDateFilter && (
               <button
@@ -131,13 +131,13 @@ export function DocumentsLibrary({ visits }: DocumentsLibraryProps) {
 
       <div className="min-h-0 flex-1 overflow-y-auto pb-1">
         {visits.length === 0 ? (
-          <div className="flex h-full flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-slate-300 bg-white text-center">
+          <div className="flex h-full flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-slate-300 bg-white/60 text-center">
             <FileSearch className="h-10 w-10 text-slate-300" strokeWidth={1.5} />
             <p className="text-sm font-medium text-slate-500">No documents yet</p>
             <p className="text-xs text-slate-400">Upload a medical record to see it here.</p>
           </div>
         ) : filtered.length === 0 ? (
-          <div className="flex h-full flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-slate-300 bg-white text-center">
+          <div className="flex h-full flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-slate-300 bg-white/60 text-center">
             <Search className="h-8 w-8 text-slate-300" strokeWidth={1.5} />
             <p className="text-sm font-medium text-slate-500">
               {search
@@ -156,11 +156,11 @@ export function DocumentsLibrary({ visits }: DocumentsLibraryProps) {
               return (
                 <div
                   key={`${visit.cloudinary_public_id}-${index}`}
-                  className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
+                  className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm ring-1 ring-slate-900/[0.02] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-slate-900/5"
                 >
                   <div>
                     <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
+                      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 text-blue-700">
                         <Icon className="h-5 w-5" strokeWidth={2} />
                       </div>
                       <div className="min-w-0">
@@ -209,7 +209,7 @@ export function DocumentsLibrary({ visits }: DocumentsLibraryProps) {
                     href={visit.document_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-4 flex items-center justify-center gap-1.5 rounded-lg border border-slate-200 py-2 text-xs font-medium text-blue-800 transition-colors hover:bg-blue-50"
+                    className="mt-4 flex items-center justify-center gap-1.5 rounded-lg border border-slate-200 py-2 text-xs font-medium text-blue-800 transition-colors hover:border-blue-200 hover:bg-blue-50"
                   >
                     <FileText className="h-3.5 w-3.5" strokeWidth={2} />
                     View original

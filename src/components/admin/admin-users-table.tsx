@@ -121,7 +121,7 @@ export function AdminUsersTable() {
   const hasFilters = Boolean(search || fromDate || toDate);
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div className="rounded-2xl border border-slate-200/80 bg-white shadow-sm ring-1 ring-slate-900/[0.02]">
       <div className="flex flex-col gap-3 border-b border-slate-200 p-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative w-full sm:max-w-xs">
           <Search
@@ -133,7 +133,7 @@ export function AdminUsersTable() {
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             placeholder="Search by name or email"
-            className="w-full rounded-lg border border-slate-300 py-2 pr-3 pl-9 text-sm focus:border-transparent focus:ring-2 focus:ring-blue-600 focus:outline-none"
+            className="w-full rounded-xl border border-slate-300 py-2 pr-3 pl-9 text-sm transition-shadow focus:border-transparent focus:ring-2 focus:ring-blue-600 focus:outline-none"
           />
         </div>
 
@@ -144,7 +144,7 @@ export function AdminUsersTable() {
               type="date"
               value={fromDate}
               onChange={(event) => setFromDate(event.target.value)}
-              className="rounded-lg border border-slate-300 px-2 py-1.5 text-sm text-slate-700 focus:border-transparent focus:ring-2 focus:ring-blue-600 focus:outline-none"
+              className="rounded-xl border border-slate-300 px-2 py-1.5 text-sm text-slate-700 transition-shadow focus:border-transparent focus:ring-2 focus:ring-blue-600 focus:outline-none"
             />
           </label>
           <label className="flex items-center gap-1.5 text-xs text-slate-500">
@@ -153,7 +153,7 @@ export function AdminUsersTable() {
               type="date"
               value={toDate}
               onChange={(event) => setToDate(event.target.value)}
-              className="rounded-lg border border-slate-300 px-2 py-1.5 text-sm text-slate-700 focus:border-transparent focus:ring-2 focus:ring-blue-600 focus:outline-none"
+              className="rounded-xl border border-slate-300 px-2 py-1.5 text-sm text-slate-700 transition-shadow focus:border-transparent focus:ring-2 focus:ring-blue-600 focus:outline-none"
             />
           </label>
           {hasFilters && (
@@ -205,7 +205,7 @@ export function AdminUsersTable() {
               users.map((user) => {
                 const isPending = pendingUserId === user.id;
                 return (
-                  <tr key={user.id} className="text-slate-700">
+                  <tr key={user.id} className="text-slate-700 transition-colors hover:bg-slate-50">
                     <td className="px-4 py-3 font-medium text-slate-900">{user.fullName}</td>
                     <td className="px-4 py-3">{user.email}</td>
                     <td className="px-4 py-3">{user.documentCount}</td>
