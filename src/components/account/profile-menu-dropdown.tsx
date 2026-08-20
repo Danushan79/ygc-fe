@@ -19,6 +19,7 @@ export function ProfileMenuDropdown({
   const router = useRouter();
   const [isSigningOut, setIsSigningOut] = useState(false);
   const [signOutError, setSignOutError] = useState<string | null>(null);
+  const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
 
   async function handleSignOut() {
     setSignOutError(null);
@@ -57,7 +58,7 @@ export function ProfileMenuDropdown({
       </div>
 
       <div className="p-2">
-        {signOutError && (
+        {signOutError && !showSignOutConfirm && (
           <p className="px-2 py-1 text-xs font-medium text-red-600">{signOutError}</p>
         )}
 
@@ -74,14 +75,68 @@ export function ProfileMenuDropdown({
         <button
           type="button"
           role="menuitem"
-          disabled={isSigningOut}
-          onClick={handleSignOut}
-          className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60"
+          onClick={() => setShowSignOutConfirm(true)}
+          className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-red-600 transition-colors hover:bg-red-50"
         >
           <LogOut className="h-5 w-5" strokeWidth={2} />
-          {isSigningOut ? "Signing out..." : "Sign Out"}
+          Sign Out
         </button>
       </div>
+
+      {showSignOutConfirm && (
+        <div
+          role="presentation"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4"
+          onClick={() => !isSigningOut && setShowSignOutConfirm(false)}
+        >
+          <div
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="signout-confirm-title"
+            onClick={(event) => event.stopPropagation()}
+            className="w-full max-w-sm overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg"
+          >
+            <div className="p-5">
+              <div className="flex items-start gap-3">
+                <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-red-50 text-red-600">
+                  <LogOut className="h-5 w-5" strokeWidth={2} />
+                </span>
+                <div>
+                  <h3 id="signout-confirm-title" className="text-base font-semibold text-slate-900">
+                    Sign Out?
+                  </h3>
+                  <p className="mt-1 text-sm text-slate-500">
+                    You&apos;ll need to sign in again to access your account.
+                  </p>
+                </div>
+              </div>
+
+              {signOutError && (
+                <p className="mt-3 text-xs font-medium text-red-600">{signOutError}</p>
+              )}
+            </div>
+
+            <div className="flex items-center justify-end gap-3 bg-slate-50 p-4">
+              <button
+                type="button"
+                onClick={() => setShowSignOutConfirm(false)}
+                disabled={isSigningOut}
+                className="rounded-lg px-4 py-2 text-sm font-semibold text-blue-800 transition-colors hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={isSigningOut}
+                onClick={handleSignOut}
+                className="flex items-center gap-2 rounded-lg bg-red-600 px-6 py-2 text-sm font-semibold text-white transition-colors hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {isSigningOut ? "Signing out..." : "Sign Out"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

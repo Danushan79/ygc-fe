@@ -88,7 +88,7 @@ export function DocumentsLibrary({ visits }: DocumentsLibraryProps) {
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Search by type, provider, or date"
-              className="w-full rounded-lg border border-slate-300 bg-white py-2 pr-3 pl-9 text-sm focus:border-transparent focus:ring-2 focus:ring-blue-600 focus:outline-none"
+              className="w-full rounded-lg border border-slate-300 bg-white py-2 pr-3 pl-9 text-sm text-slate-900 focus:border-transparent focus:ring-2 focus:ring-blue-600 focus:outline-none"
             />
           </div>
 
@@ -101,7 +101,7 @@ export function DocumentsLibrary({ visits }: DocumentsLibraryProps) {
                 onChange={(event) => setUploadedFrom(event.target.value)}
                 max={uploadedTo || undefined}
                 aria-label="Uploaded from date"
-                className="rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-sm focus:border-transparent focus:ring-2 focus:ring-blue-600 focus:outline-none"
+                className="rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-sm text-slate-900 focus:border-transparent focus:ring-2 focus:ring-blue-600 focus:outline-none"
               />
             </label>
             <span className="text-xs text-slate-400">to</span>
@@ -111,7 +111,7 @@ export function DocumentsLibrary({ visits }: DocumentsLibraryProps) {
               onChange={(event) => setUploadedTo(event.target.value)}
               min={uploadedFrom || undefined}
               aria-label="Uploaded to date"
-              className="rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-sm focus:border-transparent focus:ring-2 focus:ring-blue-600 focus:outline-none"
+              className="rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-sm text-slate-900 focus:border-transparent focus:ring-2 focus:ring-blue-600 focus:outline-none"
             />
             {hasUploadedDateFilter && (
               <button
